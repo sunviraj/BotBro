@@ -1,0 +1,71 @@
+Business Name: This browser is not supported
+About: "use strict";window.WebLiteClientLogger=(function(){var e=null,t=null,n="",r=1,o=!1,a=0,i=!1,l=!0,s=null,u=1,c=!1,d=null,m=[],p=[],_=[],f=window.performance||window.msPerformance||window.webkitPerformance||{},g=window.location.origin||window.location.protocol+"//"+window.location.hostname+(window.location.port&&":"+window.location.port),h={init:y,log:W,logEvent:P,nativeLog:q,nativeConsoleGroupCollapsed:U,nativeConsoleGroupEnd:V,markClientBundleStart:j,subscribeAndConsumeBufferedEvents:Y,setIsUsingEarlyConnect:v,incrementAttempt:K,setPreload:Q,getLogEntries:D,getOrigin:C,setOrigin:b,getNavigationType:w,origin:g,lid:"",subscribe:X,uri:"",disableRML:!1,pageID:""};function y(r){h.lid=window.WebLiteLid.getLid(),h.uri=window.location&&window.location.href,h.disableRML=r.disableRML,h.pageID=r.pageID,n=r.initLogPath,o=r.initLoadedViaSwCache,d=r.landingChannel,b(r.initOrigin),document.hidden!==void 0?(e="hidden",t="visibilitychange"):document.mozHidden!==void 0?(e="mozHidden",t="mozvisibilitychange"):document.msHidden!==void 0?(e="msHidden",t="msvisibilitychange"):document.webkitHidden!==void 0&&(e="webkitHidden",t="webkitvisibilitychange"),T(),window.addEventListener("pagehide",function(){P("pagehide")}),P("client_impression",{overrideTimestamp:window.__cImp})}function C(){return g}function b(e){g=e}function v(e){s=e}function S(){return r++}function R(){a===0&&(a=Math.floor(f.now()))}function L(){window.__dhbbs=!0}function E(){window.__dhbfp=!0}function k(){document[e]?(R(),i?P("page_hidden_after_app_start"):(P("page_hidden_before_app_start"),L()),document.removeEventListener(t,k)):P("page_revisible")}function I(){return document.visibilityState==="prerender"||document.prerendering===!0}function T(){t==null||e==null||(document[e]&&(R(),I()||E(),P("page_started_not_visible",{extra:{visibilityState:document.visibilityState,prerendering:document.prerendering}})),document.addEventListener(t,k))}function D(){return p}function x(){return window.Env!=null&&Array.isArray(window.Env.cetl)}function $(e){return x()?window.Env.cetl.indexOf(e)>=0:!0}function P(t,r){var i=window.Env&&window.Env.dbg,s=$(t);if(!(!s&&!i)){i&&f.measure&&f.measure(t);var c=r&&r.overrideTimestamp;c==null&&(c=f.now());var g={event:t,eventTime:Math.floor(c)};if(i){var y=r&&r.extra;y&&(g.extra=y),p.push(g)}var C=window.navigator,b={l:h.lid,e:t,t:Math.floor(c),s:S(),lsc:o?1:0,swc:C.serviceWorker&&C.serviceWorker.controller?1:0,fvc:a,ardr:!1,a:u,u:h.uri,h:e!=null&&document[e],ics:x()};if(window.Env&&!window.Env.dwassl&&N(b),M(b,C),d!=null&&(b.lc=d),b.nt=w(),A(b),F(b),r&&r.topScreenURIOverride!=null&&(b.tsu=r.topScreenURIOverride),O(b,r),B(b),i){var v="WebLite Client: "+b.e;b.ex&&(v+=" "+JSON.stringify(b.ex))}l&&m.push(g),_.forEach(function(e){e(n,b)}),s&&h.log(n,b)}}function N(e){e.iw=window.innerWidth,e.ow=window.outerWidth,e.dw=window.document.documentElement.clientWidth,e.ih=window.innerHeight,e.oh=window.outerHeight,e.dh=window.document.documentElement.clientHeight,e.sw=screen.width,e.sh=screen.height,e.saw=screen.availWidth,e.sah=screen.availHeight,e.dpr=window.devicePixelRatio}function M(e,t){t.hardwareConcurrency&&(e.nc=t.hardwareConcurrency),t.deviceMemory&&(e.r=t.deviceMemory),t.connection&&(e.dl=t.connection.downlink,e.ect=t.connection.effectiveType,e.rtt_ms=t.connection.rtt)}function w(){var e=f.getEntriesByType("navigation");if(e.length>0){var t=e[0];return t.type}else{var n="unknown";switch(f.navigation.type){case f.navigation.TYPE_NAVIGATE:n="navigate";break;case f.navigation.TYPE_RELOAD:n="reload";break;case f.navigation.TYPE_BACK_FORWARD:n="back_forward";break}return n}}function A(e){window._clientSharedState&&(window._clientSharedState.scrollX!=null&&(e.sx=window._clientSharedState.scrollX),window._clientSharedState.scrollY!=null&&(e.sy=window._clientSharedState.scrollY))}function F(e){var t=window.WWWClientLoggerUtil&&window.WWWClientLoggerUtil.getMetadata&&window.WWWClientLoggerUtil.getMetadata()||{},n=t.clientID,r=t.localStorageStatusJson,o=t.postCrashStartup,a=t.topScreenURI,i=t.wsBufferedAmount,l=t.wsReadyState;e.wsrs=l,e.o=window.navigator.onLine,e.wsb=i,e.cid=n,e.tsu=a,e.pc=o,e.lssj=r,window.wlct&&window.wlct.dtsg&&window.wlct.sprinkleParamName&&window.wlct.sprinkleValue&&(e.fb_dtsg=window.wlct.dtsg,e[window.wlct.sprinkleParamName]=window.wlct.sprinkleValue),s!==null&&(e.is_ec=s?1:0);var u=window.WebLiteLid.getComplimentaryLid();e.cl=u,(c||window.WebLitePipe)&&(e.pl=!0)}function O(e,t){t&&(typeof t.screenID=="number"&&!isNaN(t.screenID)&&(e.sid=t.screenID),e.wsa=t.wsAddress,e.fmc=t.firstMsgCode,e.pmd=t.pipeMessageDecodingTime,e.pems=t.pipeEncodedMessageOverallSize,e.pdms=t.pipeDecodedMessageOverallSize,e.ast=t.attemptedScreenTransition,e.astc=t.attemptedScreenTransitionCount,e.acc=t.attemptedClicksCount,e.ric=t.replayedInteractionsCount,e.chdov=t.clientHintDeviceOSVersion,e.chdm=t.clientHintDeviceModel,e.ex=t.extra)}function B(e){var t=window.Env;if(t!=null){var n=t.rp;e.rp=n;var r=t.versioncode;e.lcv=r;var o=t.wllolt;e.lot=o;var a=t.wllost;e.lost=a;var i=t.impid;e.impid=i;var l=h.pageID;e.pid=l;var s=t.fbs;e.fbs=s}}function W(e,t){if(!G(e,t)){var n=H(e,t);z(n)}}function q(e){console.log.call(console,e)}function U(e){console.groupCollapsed(e)}function V(){console.groupEnd()}function H(e,t){var n=[],r=function(e){var r=t[e];if(r!=null)if(Array.isArray(r))for(var o=r,a=0;a<o.length;a++)n.push(e+"[]="+encodeURIComponent(o[a]));else typeof r=="object"?Object.keys(r).forEach(function(t){n.push(e+("["+t+"]=")+encodeURIComponent(r[t]))}):n.push(e+"="+encodeURIComponent(t[e].toString()))};for(var o in t)r(o);h.disableRML&&n.push("_nc_rml=0");var a=C()+e,i=n.join("&");return a+"?"+i}function G(e,t){return!window.navigator||!window.navigator.sendBeacon?!1:window.navigator.sendBeacon(H(e,t))}function z(e,t){t===void 0&&(t=3);var n=new Image;t&&(n.onerror=function(n){z(e,t-1)}),n.src=e}function j(){i=!0,P("lite_bundle_main_started")}function K(){++u}function Q(){c=!0}function X(e){_.push(e)}function Y(e){l&&(l=!1,m.forEach(function(t){e(n,{e:t.event,t:t.eventTime})}),m=[],X(e))}if(window.Env&&window.Env.lnsri){var J=function(e,t){t.e==="lite_first_screen_resources_drawn"&&document.querySelector("div[data-successful-render-id]")===null&&P("no_successful_render_id")};X(J)}return h})();WebLiteClientLogger.init({"initLogPath":"\/ajax\/weblite_load_logging\/","initLoadedViaSwCache":false,"initOrigin":"https:\/\/www.facebook.com","disableRML":false,"pageID":"10320102671439217","landingChannel":null});
+Recent Posts:
+This browser is not supportedUse Facebook apptap to use a supported browserSafariChrome
+---
+American Burgervisit 15/10 tajmahal road [just opposite of Infinity Mega Mall], mohammadpur outlet for exceptionally extraordinary foods and flavors.󳃐Fast food restaurant·$
+---
+visit 15/10 tajmahal road [just opposite of Infinity Mega Mall], mohammadpur outlet for exceptionally extraordinary foods and flavors.󳃐Fast food restaurant·$
+---
+visit 15/10 tajmahal road [just opposite of Infinity Mega Mall], mohammadpur outlet for exceptionally extraordinary foods and flavors.
+---
+Details󲋕64% recommend (396 Reviews)󲄩$󲃴Closed now󲉇15/10, Tajmahal Road, Block-C, Mohammadpur, Dhaka, Bangladesh, 1207
+---
+󲉇15/10, Tajmahal Road, Block-C, Mohammadpur, Dhaka, Bangladesh, 1207
+---
+15/10, Tajmahal Road, Block-C, Mohammadpur, Dhaka, Bangladesh, 1207
+---
+Contact info󲈷01955-225582󲄿americaburger.bd@gmail.com
+---
+Happy Valentine's Day Offer !!!
+We are so delighted to offer you some of our special VDay Couple Set deals atBR.GR KLUBon 14th February 2022
+VDay Set 1...See moreMESSENGERAmerican Burger󳀱SEND MESSAGE
+---
+Happy Valentine's Day Offer !!!
+We are so delighted to offer you some of our special VDay Couple Set deals atBR.GR KLUBon 14th February 2022
+VDay Set 1...See more
+---
+Happy Valentine's Day Offer !!!
+We are so delighted to offer you some of our special VDay Couple Set deals at
+---
+PROVAT TVPlease follow and like my pagehttps://www.facebook.com/BangladeshiclassicaldeliciousfoodPROVAT TV3y
+---
+PROVAT TVPlease follow and like my pagehttps://www.facebook.com/BangladeshiclassicaldeliciousfoodPROVAT TV
+---
+PROVAT TVPlease follow and like my pagehttps://www.facebook.com/Bangladeshiclassicaldeliciousfood
+---
+Please follow and like my pagehttps://www.facebook.com/Bangladeshiclassicaldeliciousfood
+---
+https://www.facebook.com/Bangladeshiclassicaldeliciousfood
+---
+A brand new year always comes with new flavors for new experience! All our super Burger Combo offers are available only atBR.GR KLUB
+---
+A brand new year always comes with new flavors for new experience! All our super Burger Combo offers are available only at
+---
+Nazrul Islam Firozihttps://yazing.com/deals/hellofresh/fbggfhgdfredfyazing.comHelloFresh Deals | 14 Free Meals Across 5 Boxes Plus Free Shipping. | HelloFresh Coupons and Deals for November 20215y
+---
+Nazrul Islam Firozihttps://yazing.com/deals/hellofresh/fbggfhgdfredfyazing.comHelloFresh Deals | 14 Free Meals Across 5 Boxes Plus Free Shipping. | HelloFresh Coupons and Deals for November 2021
+---
+Nazrul Islam Firozihttps://yazing.com/deals/hellofresh/fbggfhgdfredf
+---
+yazing.comHelloFresh Deals | 14 Free Meals Across 5 Boxes Plus Free Shipping. | HelloFresh Coupons and Deals for November 2021
+---
+HelloFresh Deals | 14 Free Meals Across 5 Boxes Plus Free Shipping. | HelloFresh Coupons and Deals for November 2021
+---
+Enjoy this Eid-ul-Fitr staying at home with your family and enjoy our new specials with lovely promotions fromBR.GR KLUBNEW ARRIVALS: FETA CHEESE PIZZA || CHICKEN ALFREDO PIZZA...See more
+---
+Enjoy this Eid-ul-Fitr staying at home with your family and enjoy our new specials with lovely promotions from
+---
+NEW ARRIVALS: FETA CHEESE PIZZA || CHICKEN ALFREDO PIZZA
+---
+Enjoy our Takeaway Iftar deals right on your table with direct pick-up service or through our delivery partners :
+FOODPANDA/UBER-EATS/PATHAO/SHOHOZ-FOOD/HUNGRYNAKI cheers fromBR.GR KLUB...See more
+---
+Enjoy our Takeaway Iftar deals right on your table with direct pick-up service or through our delivery partners :
+FOODPANDA/UBER-EATS/PATHAO/SHOHOZ-FOOD/HUNGRYNAKI cheers from
+---
+WE ARE OUT OF HOME TO COOK YOUR FAVORITE HEALTHY DISHES | SO KEEP STAYING HOME AND ENJOY MEALS WITH EVERY MEMBERS OF YOUR FAMILY !!
+CALL 01955225582 TO GET SPECIAL INDEPENDENCE DAY TREAT FROMBR.GR KLUB
+---
+WE ARE OUT OF HOME TO COOK YOUR FAVORITE HEALTHY DISHES | SO KEEP STAYING HOME AND ENJOY MEALS WITH EVERY MEMBERS OF YOUR FAMILY !!
+CALL 01955225582 TO GET SPECIAL INDEPENDENCE DAY TREAT FROM

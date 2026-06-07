@@ -1,0 +1,22 @@
+<USER_REQUEST>
+We are continuing development of "InteractAI" (internally 
+called SiteGPT-Plus) — a fully functional SaaS MVP that 
+creates AI-powered chatbots from website URLs.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ WHAT IS ALREADY BUILT & WORKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+- Playwright-based dynamic website crawler
+- BeautifulSoup content cleaner
+- Semantic chunking with all-MiniLM-L6-v2 embeddings
+- ChromaDB vector store with isolated collections per bot_id
+- FastAPI backend with /create-bot, /bot-status, /query endpoints
+- SQLite database for bot metadata
+- Glassmorphism dark-mode SaaS dashboard (HTML/CSS/JS)
+- Embeddable vanilla JS chat widget (widget.js)
+- Gemini Flash Lite for RAG inference
+- [INSIGHT] tag system for detecting knowledge gaps
+- Multi-bot management (Bot Library)
+- Live bot preview/testing environment
+
+<truncated 2894 bytes>
