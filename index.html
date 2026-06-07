@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Bro – AI Chatbot for Your Website | botbro.editians.com</title>
+    <meta name="description" content="Turn any website into a 24/7 AI chatbot in 60 seconds. Bot Bro by Editians — Bangladesh's smartest AI SaaS. bKash payment. ৳499/মাস থেকে।">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+    /* ══════════════════════════════════
+       DESIGN TOKENS — DARK (default)
+    ══════════════════════════════════ */
+    :root {
+        --bg: #03050a;
+        --bg2: #07090f;
+        --card: rgba(12,16,26,0.85);
+        --card-solid: #0d1120;
+        --card-hover: rgba(18,25,40,0.95);
+        --nav-bg: rgba(3,5,10,0.85);
+        --accent: #00f0ff;
+        --accent-glow: rgba(0,240,255,0.22);
+        --accent2: #7c3aed;
+        --accent2-glow: rgba(124,58,237,0.22);
+        --green: #00ff88;
+        --orange: #ff8c00;
+        --red: #ff4444;
+        --text: #f0f4ff;
+        --text-dim: #8899bb;
+        --text-muted: #4a5a7a;
+        --border: rgba(255,255,255,0.07);
+        --border-accent: rgba(0,240,255,0.25);
+        --shadow: rgba(0,0,0,0.6);
+        --grid-color: rgba(0,240,255,0.022);
+        --orb1: rgba(0,240,255,0.07);
+        --orb2: rgba(124,58,237,0.08);
+        --orb3: rgba(0,255,136,0.04);
+        --code-bg: #000;
+        --theme-transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+    }
+
+    /* ══════════════════════════════════
+       LIGHT MODE OVERRIDES
+    ══════════════════════════════════ */
+    [data-theme="light"] {
+        --bg: #f4f6fb;
+        --bg2: #eef0f7;
+        --card: rgba(255,255,255,0.9);
+        --card-solid: #ffffff;
+        --card-hover: rgba(255,255,255,1);
+        --nav-bg: rgba(244,246,251,0.92);
+        --accent: #0066cc;
+        --accent-glow: rgba(0,102,204,0.2);
+        --accent2: #6d28d9;
+        --accent2-glow: rgba(109,40,217,0.2);
+        --green: #16a34a;
+        --orange: #ea580c;
+        --red: #dc2626;
+        --text: #0f1117;
+        --text-dim: #4a5568;
+        --text-muted: #a0aec0;
+        --border: rgba(0,0,0,0.08);
+        --border-accent: rgba(0,102,204,0.3);
+        --shadow: rgba(0,0,0,0.12);
+        --grid-color: rgba(0,102,204,0.04);
+        --orb1: rgba(0,102,204,0.06);
+        --orb2: rgba(109,40,217,0.05);
+        --orb3: rgba(22,163,74,0.04);
+        --code-bg: #1e1e2e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Outfit', 'Hind Siliguri', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        overflow-x: hidden;
+        line-height: 1.6;
+        transition: var(--theme-transition);
+    }
+
+    /* ── GRID BACKGROUND ── */
+    .bg-grid {
+        position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        background-image:
+            linear-gradient(var(--grid-color) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 60px 60px;
+        transition: var(--theme-transition);
+    }
+    .orb {
+        position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+        filter: blur(80px); transition: var(--theme-transition);
+    }
+    .orb-1 { width:700px;height:700px; background:radial-gradient(circle,var(--orb1),transparent 70%); top:-200px;right:-200px; animation:orbFloat 18s ease-in-out infinite alternate; }
+    .orb-2 { width:500px;height:500px; background:radial-gradient(circle,var(--orb2),transparent 70%); bottom:0;left:-150px; animation:orbFloat 22s ease-in-out infinite alternate-reverse; }
+    .orb-3 { width:400px;height:400px; background:radial-gradient(circle,var(--orb3),transparent 70%); top:50%;left:40%; animation:orbFloat 15s ease-in-out infinite alternate; }
+    @keyframes orbFloat { from{transform:translate(0,0) scale(1)} to{transform:translate(40px,60px) scale(1.15)} }
+
+    /* ══════════════════════════════════
+       NAVIGATION
+    ══════════════════════════════════ */
+    nav {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 0 5%; height: 72px;
+        background: var(--nav-bg);
+        backdrop-filter: blur(24px) saturate(180%);
+        border-bottom: 1px solid var(--border);
+        transition: var(--theme-transition);
+    }
+    nav::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+        background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+        animation: laserScan 5s linear infinite; transition: var(--theme-transition);
+    }
+    @keyframes laserScan { 0%{clip-path:inset(0 100% 0 0)} 100%{clip-path:inset(0 0 0 100%)} }
+
+    .logo {
+        font-size: 24px; font-weight: 800; letter-spacing: -0.5px;
+        display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text);
+        flex-shrink: 0;
+    }
+    .logo-icon {
+        width: 34px; height: 34px; border-radius: 10px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex; align-items: center; justify-content: center; font-size: 17px;
+        box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .logo-text { display: flex; align-items: baseline; gap: 0; }
+    .logo-text .bot { color: var(--text); }
+    .logo-text .hub { color: var(--accent); text-shadow: 0 0 20px var(--accent-glow); }
+    .logo-sub { font-size: 10px; color: var(--text-muted); font-weight: 400; letter-spacing: 1px; margin-left: 2px; display: block; line-height: 1; }
+
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+        color: var(--text-dim); text-decoration: none; font-size: 14px;
+        padding: 8px 14px; border-radius: 8px; transition: all 0.2s; white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--text); background: var(--border); }
+
+    /* Language Toggle */
+    .lang-toggle {
+        display: flex; align-items: center; gap: 0;
+        background: var(--card); border: 1px solid var(--border);
+        border-radius: 20px; padding: 3px; cursor: pointer; overflow: hidden;
+        transition: var(--theme-transition);
+    }
+    .lang-btn {
+        padding: 4px 10px; border-radius: 16px; font-size: 11px; font-weight: 700;
+        border: none; background: transparent; cursor: pointer; color: var(--text-dim);
+        font-family: 'Outfit', sans-serif; letter-spacing: 0.5px; transition: all 0.25s;
+    }
+    .lang-btn.active {
+        background: var(--accent); color: #03050a;
+        box-shadow: 0 2px 8px var(--accent-glow);
+    }
+    [data-theme="light"] .lang-btn.active { color: #fff; }
+
+    /* Theme Toggle */
+    .theme-toggle {
+        width: 36px; height: 36px; border-radius: 10px;
+        background: var(--card); border: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; font-size: 17px; transition: all 0.25s;
+        flex-shrink: 0;
+    }
+    .theme-toggle:hover { background: var(--border); transform: scale(1.08); }
+
+    /* Mobile Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile Nav Drawer */
+    .mobile-nav {
+        display: none; position: fixed; top: 72px; left: 0; right: 0; z-index: 999;
+        background: var(--nav-bg); backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column; padding: 16px 5%; gap: 4px;
+        animation: mobileNavSlide 0.25s ease-out;
+    }
+    .mobile-nav.open { display: flex; }
+    @keyframes mobileNavSlide { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+    .mobile-nav a {
+        padding: 12px 16px; border-radius: 10px; text-decoration: none;
+        color: var(--text-dim); font-size: 15px; transition: all 0.2s;
+        border: 1px solid transparent;
+    }
+    .mobile-nav a:hover { color: var(--text); background: var(--border); }
+    .mobile-nav .mobile-btns { display: flex; gap: 8px; margin-top: 8px; }
+    .mobile-nav .mobile-btns a { flex: 1; text-align: center; }
+
+    /* ══════════════════════════════════
+       BUTTONS
+    ══════════════════════════════════ */
+    .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 12px 28px; border-radius: 50px; font-weight: 700; font-size: 14px;
+        text-decoration: none; cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        letter-spacing: 0.3px; position: relative; overflow: hidden;
+        font-family: 'Outfit', sans-serif;
+    }
+    .btn::before {
+        content: ''; position: absolute; inset: 0; border-radius: inherit;
+        background: linear-gradient(45deg,transparent,rgba(255,255,255,0.15),transparent);
+        transform: translateX(-100%) skewX(-15deg); transition: transform 0.5s;
+    }
+    .btn:hover::before { transform: translateX(120%) skewX(-15deg); }
+    .btn-primary { background: linear-gradient(135deg, var(--orange), #ff5500); color: #fff; font-weight: 700; border: none; box-shadow: 0 8px 20px rgba(255,140,0,0.3); }
+    .btn-primary:hover { box-shadow: 0 12px 30px rgba(255,140,0,0.5); transform: translateY(-3px); }
+    .btn-outline {
+        background: transparent; color: var(--text); border: 1px solid var(--border-accent);
+    }
+    .btn-outline:hover { background: rgba(0,240,255,0.05); border-color: var(--accent); transform: translateY(-2px); }
+    [data-theme="light"] .btn-outline { color: var(--text); }
+    .btn-lg { padding: 16px 40px; font-size: 16px; }
+    .btn-bkash {
+        background: linear-gradient(135deg, #e2136e 0%, #c0105c 100%);
+        color: white; box-shadow: 0 8px 25px rgba(226,19,110,0.35);
+    }
+    .btn-bkash:hover { transform: translateY(-3px); box-shadow: 0 16px 35px rgba(226,19,110,0.5); }
+
+    /* ══════════════════════════════════
+       LAYOUT
+    ══════════════════════════════════ */
+    .hero {
+        position: relative;
+        padding: 180px 24px 120px;
+        text-align: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .floating-bubbles {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        z-index: -1;
+    }
+    .f-bubble {
+        position: absolute;
+        background: rgba(12,16,26,0.72);
+        backdrop-filter: blur(12px) saturate(160%);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-size: 13px;
+        color: var(--text-dim);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+        animation: floatBubble 10s ease-in-out infinite;
+        opacity: 0.85;
+        white-space: nowrap;
+    }
+    [data-theme="light"] .f-bubble { background: rgba(255,255,255,0.75); border-color: rgba(0,0,0,0.09); }
+    .f-bubble.f1 { top: 15%; left: 3%; animation-duration: 12s; }
+    .f-bubble.f2 { top: 55%; right: 2%; animation-duration: 15s; animation-delay: 2s; }
+    .f-bubble.f3 { bottom: 25%; left: 8%; animation-duration: 14s; animation-delay: 1s; }
+    .f-bubble.f4 { top: 25%; right: 18%; animation-duration: 18s; animation-delay: 4s; }
+    .f-bubble.f5 { bottom: 40%; right: 10%; animation-duration: 11s; animation-delay: 3s; }
+    .f-bubble.f6 { top: 70%; left: 25%; animation-duration: 13s; animation-delay: 5s; }
+    @keyframes floatBubble {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-28px) scale(1.04); }
+    }
+    section { position: relative; z-index: 1; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
+    .section-tag {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+        color: var(--accent); background: var(--accent-glow);
+        border: 1px solid var(--border-accent); border-radius: 50px;
+        padding: 6px 16px; margin-bottom: 24px;
+    }
+    .section-tag.red { color: var(--red); background: rgba(255,68,68,0.08); border-color: rgba(255,68,68,0.25); }
+    .section-tag.purple { color: #a78bfa; background: rgba(167,139,250,0.08); border-color: rgba(167,139,250,0.25); }
+    .section-tag.pink { color: #ff6ba8; background: rgba(226,19,110,0.08); border-color: rgba(226,19,110,0.25); }
+    .section-title {
+        font-size: clamp(30px, 5vw, 50px); font-weight: 800; line-height: 1.12;
+        letter-spacing: -1.5px; margin-bottom: 20px;
+    }
+    .section-sub { font-size: 17px; color: var(--text-dim); line-height: 1.7; max-width: 600px; }
+
+    /* ══════════════════════════════════
+       HERO
+    ══════════════════════════════════ */
+    #hero {
+        min-height: 100vh; padding-top: 72px;
+        display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    .hero-inner { max-width: 900px; margin: 0 auto; padding: 80px 5%; }
+    .hero-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: rgba(226,19,110,0.10); border: 1px solid rgba(226,19,110,0.28);
+        border-radius: 50px; padding: 8px 20px; margin-bottom: 32px;
+        font-size: 13px; color: #ff6ba8; animation: fadeUp 0.8s ease-out forwards;
+    }
+    .hero-h1 {
+        font-size: clamp(42px, 7.5vw, 78px); font-weight: 800;
+        line-height: 1.08; letter-spacing: -2.5px; margin-bottom: 24px;
+        animation: fadeUp 0.9s ease-out 0.1s both;
+    }
+    .hero-h1 .grad {
+        background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent));
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-size: 300%; animation: textShimmer 4s ease infinite;
+    }
+    .hero-h1 .text-main {
+        background: linear-gradient(180deg, var(--text) 30%, rgba(200,210,240,0.6) 100%);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    @keyframes textShimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    .hero-sub {
+        font-size: 19px; color: var(--text-dim); line-height: 1.7;
+        margin-bottom: 44px; max-width: 640px; margin-left: auto; margin-right: auto;
+        animation: fadeUp 1s ease-out 0.2s both;
+    }
+    .hero-cta {
+        display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+        margin-bottom: 56px; animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+        animation: fadeUp 1s ease-out 0.5s both; margin-bottom: 60px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 30px; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
+    .stat-label { font-size: 12px; color: var(--text-dim); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Typing effect */
+    .typing-cursor::after {
+        content: '|'; animation: blink 1s step-end infinite; color: var(--accent);
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* 3D Mockup */
+    .hero-mockup { perspective: 1200px; animation: fadeUp 1.2s ease-out 0.4s both; }
+    .mockup-3d-wrapper {
+        transform: perspective(1200px) rotateX(8deg) rotateY(-3deg);
+        transform-origin: center bottom; transition: transform 0.6s ease;
+        animation: mockupFloat 6s ease-in-out infinite alternate;
+    }
+    .hero-mockup:hover .mockup-3d-wrapper { transform: perspective(1200px) rotateX(2deg) rotateY(0deg); }
+    @keyframes mockupFloat {
+        from{transform:perspective(1200px) rotateX(8deg) rotateY(-3deg) translateY(0)}
+        to  {transform:perspective(1200px) rotateX(6deg) rotateY(-1deg) translateY(-10px)}
+    }
+    .mockup-shell {
+        background: var(--card-solid); border: 1px solid var(--border-accent);
+        border-radius: 20px; overflow: hidden;
+        box-shadow: 0 40px 80px -20px var(--shadow), 0 0 60px -20px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .mockup-title-bar {
+        background: rgba(0,240,255,0.04); border-bottom: 1px solid var(--border);
+        padding: 14px 20px; display: flex; align-items: center; gap: 10px;
+    }
+    [data-theme="light"] .mockup-title-bar { background: rgba(0,102,204,0.04); }
+    .dot{width:11px;height:11px;border-radius:50%}
+    .dot-r{background:#ff5f56}.dot-y{background:#ffbd2e}.dot-g{background:#27c93f}
+    .mockup-url-bar {
+        flex:1; background: var(--border); border: 1px solid var(--border);
+        border-radius:6px; padding:5px 12px; font-size:12px; color:var(--text-dim); font-family:monospace;
+    }
+    .mockup-body { display:grid; grid-template-columns:1fr 1fr; min-height:220px; }
+    .mockup-panel { padding:20px; border-right:1px solid var(--border); }
+    .mockup-panel:last-child{border-right:none}
+    .mockup-panel h4{font-size:12px;color:var(--text-dim);margin-bottom:14px}
+    .mockup-stat {
+        display:flex; align-items:center; gap:8px;
+        background: var(--accent-glow); border:1px solid var(--border-accent);
+        border-radius:10px; padding:10px 14px; margin-bottom:8px; font-size:12px;
+    }
+    .dot-sm{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0}
+    .chat-bubble-bot {
+        background: var(--border); border-radius:14px 14px 14px 4px;
+        padding:10px 14px; font-size:12px; max-width:85%; margin-bottom:8px; color:var(--text);
+    }
+    .chat-bubble-user {
+        background:var(--accent); color:#03050a;
+        border-radius:14px 14px 4px 14px;
+        padding:10px 14px; font-size:12px; max-width:75%; margin-left:auto; margin-bottom:8px;
+    }
+    [data-theme="light"] .chat-bubble-user { color: #fff; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Floating shapes */
+    .shape{position:absolute;pointer-events:none;z-index:0}
+    .shape-ring{width:200px;height:200px;border-radius:50%;border:2px solid var(--border-accent);top:15%;right:8%;animation:shapeFloat 12s ease-in-out infinite alternate,shapeSpin 20s linear infinite}
+    .shape-ring::before{content:'';position:absolute;inset:15px;border-radius:50%;border:1px solid rgba(124,58,237,0.15)}
+    .shape-cube{width:60px;height:60px;background:linear-gradient(135deg,var(--accent-glow),var(--accent2-glow));border:1px solid var(--border-accent);border-radius:12px;bottom:20%;left:6%;animation:shapeFloat 8s ease-in-out infinite alternate,shapeSpin 15s linear infinite}
+    @keyframes shapeFloat{from{transform:translateY(0) rotate(0deg)}to{transform:translateY(-30px) rotate(15deg)}}
+    @keyframes shapeSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+    /* ══════════════════════════════════
+       TRUST BANNER
+    ══════════════════════════════════ */
+    #trust {
+        padding: 28px 5%;
+        background: var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+        transition: var(--theme-transition);
+    }
+    .trust-inner { max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:40px;flex-wrap:wrap;justify-content:center; }
+    .trust-label{font-size:11px;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase}
+    .trust-logos{display:flex;gap:36px;align-items:center;flex-wrap:wrap;justify-content:center}
+    .trust-logo{font-size:13px;font-weight:700;color:var(--text-muted);letter-spacing:1px}
+
+    /* ══════════════════════════════════
+       PROBLEM
+    ══════════════════════════════════ */
+    #problem { padding: 120px 0; }
+    .problem-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:24px;margin-top:60px; }
+    .problem-card {
+        background: rgba(255,68,68,0.03); border:1px solid rgba(255,68,68,0.12);
+        border-radius:24px; padding:36px; transition:all 0.4s ease; position:relative; overflow:hidden;
+    }
+    [data-theme="light"] .problem-card { background: rgba(220,38,38,0.04); border-color: rgba(220,38,38,0.15); }
+    .problem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,68,68,0.4),transparent)}
+    .problem-card:hover{transform:translateY(-8px);border-color:rgba(255,68,68,0.3);box-shadow:0 20px 40px -10px rgba(255,68,68,0.1)}
+    .problem-icon{font-size:38px;margin-bottom:20px;display:block;filter:drop-shadow(0 0 10px rgba(255,68,68,0.3))}
+    .problem-card h3{font-size:19px;font-weight:700;margin-bottom:10px;color:#ff9999}
+    [data-theme="light"] .problem-card h3 { color: #b91c1c; }
+    .problem-card p{font-size:14px;color:var(--text-dim);line-height:1.7}
+
+    /* ══════════════════════════════════
+       SOLUTION
+    ══════════════════════════════════ */
+    #solution { padding:120px 0; background:linear-gradient(180deg,transparent,rgba(0,240,255,0.012),transparent); }
+    .solution-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;margin-top:60px}
+    .solution-card {
+        background:var(--card); border:1px solid var(--border);
+        border-radius:24px; padding:36px; transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+        position:relative; overflow:hidden;
+    }
+    .solution-card::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(ellipse at top left,var(--accent-glow),transparent 60%)}
+    .solution-card:hover{transform:translateY(-12px);border-color:var(--border-accent);box-shadow:0 30px 60px -15px var(--shadow),0 0 50px -15px var(--accent-glow)}
+    .sol-icon{width:54px;height:54px;border-radius:16px;margin-bottom:22px;display:flex;align-items:center;justify-content:center;font-size:24px;background:var(--accent-glow);border:1px solid var(--border-accent);box-shadow:0 0 24px var(--accent-glow)}
+    .solution-card h3{font-size:19px;font-weight:700;margin-bottom:10px}
+    .solution-card p{font-size:14px;color:var(--text-dim);line-height:1.7}
+
+    /* ══════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════ */
+    #how { padding:120px 0; }
+    .steps-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:60px}
+    @media(max-width:900px){.steps-layout{grid-template-columns:1fr;gap:40px}}
+    .steps-list{display:flex;flex-direction:column;gap:28px}
+    .step-item{display:flex;gap:18px;align-items:flex-start;padding:22px;border-radius:18px;border:1px solid transparent;transition:all 0.3s;cursor:default}
+    .step-item:hover{background:var(--card);border-color:var(--border)}
+    .step-num{width:42px;height:42px;border-radius:13px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#fff;box-shadow:0 0 20px var(--accent-glow)}
+    .step-text h3{font-size:17px;font-weight:700;margin-bottom:5px}
+    .step-text p{font-size:13px;color:var(--text-dim);line-height:1.6}
+
+    .integration-panel{background:var(--card);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 40px 80px -20px var(--shadow)}
+    .int-tab-bar{display:flex;gap:4px;padding:16px 20px 0;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.15)}
+    [data-theme="light"] .int-tab-bar { background:rgba(0,0,0,0.03); }
+    .int-tab{padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;border-radius:8px 8px 0 0;color:var(--text-dim);border:1px solid transparent;border-bottom:none;transition:all 0.2s;font-family:'Outfit',sans-serif;background:none}
+    .int-tab.active{background:var(--card);color:var(--accent);border-color:var(--border-accent)}
+    .int-body{padding:24px}
+    .int-content{display:none}.int-content.active{display:block}
+    .int-content p{font-size:14px;color:var(--text-dim);margin-bottom:16px;line-height:1.7}
+    .code-block{background:var(--code-bg);border:1px solid var(--border);border-radius:12px;padding:20px;font-family:'Courier New',monospace;font-size:13px;color:#00ff88;line-height:1.6;position:relative}
+    .code-copy{position:absolute;top:12px;right:12px;background:var(--accent-glow);border:1px solid var(--border-accent);color:var(--accent);padding:4px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Outfit',sans-serif;transition:all 0.2s}
+    .code-copy:hover{background:var(--accent);color:#03050a}
+
+    /* ══════════════════════════════════
+       PRICING
+    ══════════════════════════════════ */
+    #pricing { padding:120px 0; background:linear-gradient(180deg,transparent,rgba(124,58,237,0.015),transparent); }
+    .pricing-toggle-wrap { display:flex;justify-content:center;margin:24px 0 50px;gap:0; }
+    .pricing-toggle {
+        display:flex;background:var(--card);border:1px solid var(--border);border-radius:50px;padding:4px;gap:2px;
+    }
+    .ptog-btn {
+        padding:7px 20px;border-radius:50px;font-size:13px;font-weight:700;border:none;
+        background:transparent;color:var(--text-dim);cursor:pointer;font-family:'Outfit',sans-serif;
+        transition:all 0.25s; position:relative;
+    }
+    .ptog-btn.active{background:var(--accent);color:#fff}
+    .ptog-badge{background:#e2136e;color:#fff;font-size:9px;font-weight:800;padding:2px 6px;border-radius:10px;margin-left:4px;vertical-align:middle}
+
+    .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;align-items:start}
+    .pricing-card{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:40px 34px;transition:all 0.4s ease;position:relative;display:flex;flex-direction:column}
+    .pricing-card:hover{transform:translateY(-10px);box-shadow:0 30px 60px -15px var(--shadow)}
+    .pricing-card.featured{border-color:var(--accent);background:var(--card);box-shadow:0 0 60px -20px var(--accent-glow)}
+    .pricing-card.featured:hover{box-shadow:0 30px 80px -15px var(--accent-glow)}
+    .plan-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#03050a;font-size:11px;font-weight:800;padding:5px 16px;border-radius:50px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+    [data-theme="light"] .plan-badge { color: #fff; }
+    .plan-name{font-size:13px;color:var(--text-dim);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+    .plan-price-bdt{font-size:46px;font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:4px}
+    .plan-price-bdt .currency{font-size:26px;color:var(--accent)}
+    .plan-price-usd{font-size:13px;color:var(--text-dim);margin-bottom:26px}
+    .plan-divider{border:none;border-top:1px solid var(--border);margin:0 0 26px}
+    .plan-features{list-style:none;margin-bottom:30px;flex-grow:1;display:flex;flex-direction:column;gap:11px}
+    .plan-features li{font-size:14px;color:var(--text-dim);display:flex;align-items:center;gap:10px}
+    .plan-features li .check{color:var(--green);font-size:15px;flex-shrink:0}
+    .plan-features li .x{color:var(--text-muted);font-size:15px;flex-shrink:0}
+    .bkash-badge{display:flex;align-items:center;gap:8px;background:rgba(226,19,110,0.08);border:1px solid rgba(226,19,110,0.2);border-radius:10px;padding:10px 14px;margin-top:12px;font-size:12px;color:#ff6ba8}
+
+    /* ══════════════════════════════════
+       BKASH SECTION
+    ══════════════════════════════════ */
+    #bkash-info { padding:100px 0; }
+    .bkash-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:60px}
+    @media(max-width:900px){.bkash-layout{grid-template-columns:1fr;gap:40px}}
+    .bkash-steps{display:flex;flex-direction:column;gap:18px}
+    .bkash-step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;transition:all 0.3s}
+    .bkash-step:hover{border-color:rgba(226,19,110,0.3);transform:translateX(6px)}
+    .bkash-step-num{width:34px;height:34px;border-radius:50%;flex-shrink:0;background:#e2136e;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+    .bkash-step p{font-size:13px;color:var(--text-dim);line-height:1.6;margin:0}
+    .bkash-step strong{color:var(--text);display:block;margin-bottom:3px;font-size:14px}
+    .bkash-card{background:linear-gradient(135deg,#e2136e 0%,#9c0b47 100%);border-radius:24px;padding:40px;position:relative;overflow:hidden;box-shadow:0 30px 60px -15px rgba(226,19,110,0.4)}
+    .bkash-card::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.05)}
+    .bkash-card-content{position:relative;z-index:1}
+    .bkash-card-logo{font-size:38px;margin-bottom:14px}
+    .bkash-card h3{font-size:24px;font-weight:800;color:white;margin-bottom:10px}
+    .bkash-card p{font-size:14px;color:rgba(255,255,255,0.8);margin-bottom:22px;line-height:1.6}
+    .bkash-number{background:rgba(0,0,0,0.25);border-radius:12px;padding:14px 18px;font-size:22px;font-weight:800;color:white;font-family:monospace;letter-spacing:2px;text-align:center;margin-bottom:18px}
+    .bkash-number small{font-size:11px;color:rgba(255,255,255,0.6);display:block;margin-bottom:5px;font-family:'Outfit',sans-serif;font-weight:400;letter-spacing:0}
+
+    /* ══════════════════════════════════
+       STATS TICKER
+    ══════════════════════════════════ */
+    .stats-ticker { overflow: hidden; margin: 40px auto 0; max-width: 800px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .ticker-track { display: flex; gap: 60px; white-space: nowrap; animation: ticker 20s linear infinite; }
+    .ticker-track span { font-size: 13px; color: var(--text-dim); font-weight: 600; flex-shrink: 0; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* ══════════════════════════════════
+       TESTIMONIALS CAROUSEL
+    ══════════════════════════════════ */
+    #testimonials { padding:120px 0; }
+    .carousel-wrapper { margin-top: 60px; position: relative; overflow: hidden; }
+    .carousel-track {
+        display: flex;
+        gap: 24px;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+    .testimonial-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 32px;
+        transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        flex: 0 0 calc(33.333% - 16px);
+        min-width: calc(33.333% - 16px);
+        box-sizing: border-box;
+        backdrop-filter: blur(10px);
+    }
+    @media(max-width: 768px) {
+        .testimonial-card { flex: 0 0 100%; min-width: 100%; }
+    }
+    .testimonial-card:hover { border-color: var(--border-accent); box-shadow: 0 20px 50px -15px var(--shadow); }
+    .stars { color:#fbbf24; font-size:17px; margin-bottom:14px; letter-spacing:2px; }
+    .testimonial-text { font-size:14px; color:var(--text-dim); line-height:1.75; margin-bottom:22px; font-style:italic; }
+    .testimonial-author { display:flex; align-items:center; gap:12px; }
+    .author-avatar { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#fff; flex-shrink:0; }
+    .author-name { font-weight:700; font-size:14px; }
+    /* Dot indicators */
+    .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:32px; }
+    .carousel-dot {
+        width:8px; height:8px; border-radius:50%;
+        background: var(--border-accent); border: none; cursor: pointer;
+        transition: all 0.3s ease; padding: 0;
+    }
+    .carousel-dot.active { background: var(--accent); width: 24px; border-radius: 4px; box-shadow: 0 0 10px var(--accent-glow); }
+
+    /* ══════════════════════════════════
+       CTA BANNER
+    ══════════════════════════════════ */
+    #cta-banner { padding:100px 5%; }
+    .cta-inner{max-width:800px;margin:0 auto;text-align:center;background:linear-gradient(135deg,var(--accent-glow),var(--accent2-glow));border:1px solid var(--border-accent);border-radius:32px;padding:72px 52px;position:relative;overflow:hidden}
+    .cta-inner::before{content:'';position:absolute;top:-1px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+    .cta-inner h2{font-size:clamp(26px,4vw,42px);font-weight:800;margin-bottom:14px;letter-spacing:-1px}
+    .cta-inner p{font-size:16px;color:var(--text-dim);margin-bottom:36px;line-height:1.7}
+    .cta-buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    footer{border-top:1px solid var(--border);padding:56px 5% 36px;position:relative;z-index:1;transition:var(--theme-transition)}
+    .footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px}
+    @media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr;gap:36px}}
+    @media(max-width:500px){.footer-inner{grid-template-columns:1fr}}
+    .footer-brand p{font-size:13px;color:var(--text-dim);line-height:1.7;margin-top:14px}
+    .footer-col h5{font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+    .footer-col a{display:block;font-size:13px;color:var(--text-dim);text-decoration:none;margin-bottom:9px;transition:color 0.2s}
+    .footer-col a:hover{color:var(--accent)}
+    .footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid var(--border);padding-top:26px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px}
+    .footer-bottom p{font-size:12px;color:var(--text-muted)}
+    .footer-bkash-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);background:rgba(226,19,110,0.07);border:1px solid rgba(226,19,110,0.13);padding:5px 12px;border-radius:20px}
+
+    /* ══════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════ */
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+
+    /* ══════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════ */
+    @media(max-width:768px){
+        .nav-links{display:none}
+        .hamburger{display:flex}
+        .hero-cta .btn-lg{padding:13px 26px;font-size:15px}
+        .mockup-body{grid-template-columns:1fr}
+        .stats-bar{gap:28px}
+        .stat-num{font-size:24px}
+    }
+    @media(max-width:480px){
+        .stats-bar{flex-direction:column;gap:16px}
+        .cta-inner{padding:48px 28px}
+    }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav id="main-nav">
+    <a href="#" class="logo">
+        <div id="text-logo" style="display:flex; align-items:center; gap:8px;">
+            <div class="logo-icon">🕷️</div>
+            <div>
+                <div class="logo-text" style="display:flex;align-items:baseline;gap:4px;"><span class="bot">Bot</span><span class="hub" style="color:var(--orange)">Bro</span></div>
+                <span class="logo-sub">by Editians</span>
+            </div>
+        </div>
+    </a>
+
+    <div class="nav-links">
+        <a href="docs.html" data-en="Documentation" data-bn="ডকুমেন্টেশন">Documentation</a>
+        <a href="#problem" data-en="Problem" data-bn="সমস্যা">Problem</a>
+        <a href="#solution" data-en="Solution" data-bn="সমাধান">Solution</a>
+        <a href="#how" data-en="How It Works" data-bn="কীভাবে কাজ করে">How It Works</a>
+        <a href="#pricing" data-en="Pricing" data-bn="মূল্য">Pricing</a>
+        <a href="docs.html" data-en="Documentation" data-bn="ডকুমেন্টেশন">Documentation</a>
+    </div>
+
+    <div class="nav-right">
+        <!-- Language Toggle -->
+        <div class="lang-toggle" id="lang-toggle" title="Toggle Language">
+            <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" id="btn-bn" onclick="setLang('bn')">বাং</button>
+        </div>
+        <!-- Theme Toggle -->
+        <div class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">🌙</div>
+
+        <a href="dashboard/login.html" class="btn btn-outline" style="padding:9px 18px;font-size:13px;" data-en="Log In" data-bn="লগ ইন">Log In</a>
+        <a href="dashboard/signup.html" class="btn btn-primary" style="padding:9px 20px;font-size:13px;" data-en="Get Started Free" data-bn="বিনামূল্যে শুরু করুন">Get Started Free</a>
+        <!-- Hamburger -->
+        <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Nav Drawer -->
+<div class="mobile-nav" id="mobile-nav">
+    <a href="#problem" onclick="closeMobileNav()" data-en="Problem" data-bn="সমস্যা">Problem</a>
+    <a href="#solution" onclick="closeMobileNav()" data-en="Solution" data-bn="সমাধান">Solution</a>
+    <a href="#how" onclick="closeMobileNav()" data-en="How It Works" data-bn="কীভাবে কাজ করে">How It Works</a>
+    <a href="#pricing" onclick="closeMobileNav()" data-en="Pricing" data-bn="মূল্য">Pricing</a>
+    <div class="mobile-btns">
+        <a href="dashboard/login.html" class="btn btn-outline" data-en="Log In" data-bn="লগ ইন">Log In</a>
+        <a href="dashboard/signup.html" class="btn btn-primary" data-en="Get Started Free" data-bn="বিনামূল্যে শুরু">Get Started Free</a>
+    </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+    <div class="shape shape-ring"></div>
+    <div class="shape shape-cube"></div>
+
+    <!-- Floating Chat Bubbles -->
+    <div class="floating-bubbles">
+        <div class="f-bubble f1">Hello! How can I help? ✨</div>
+        <div class="f-bubble f2">bKash payment ৳499 confirmed! 💳</div>
+        <div class="f-bubble f3">Your order is confirmed! 📦</div>
+        <div class="f-bubble f4">Dr. Rahman is available at 10am</div>
+        <div class="f-bubble f5">আমাদের shoe collection দেখুন 👟</div>
+        <div class="f-bubble f6">Lead captured! 🎯</div>
+    </div>
+
+    <div class="hero-inner">
+        <div class="hero-badge">
+            <span>🇧🇩</span>
+            <span data-en="Made for Bangladesh · bKash Payment Accepted" data-bn="বাংলাদেশের জন্য তৈরি · bKash পেমেন্ট গ্রহণযোগ্য">Made for Bangladesh · bKash Payment Accepted</span>
+        </div>
+
+        <h1 class="hero-h1">
+            <span class="text-main" data-en="Your Website Deserves a" data-bn="আপনার ওয়েবসাইট পাওয়ার যোগ্য">Your Website Deserves a</span><br>
+            <span class="grad typing-text" id="typing-target">24/7 AI Brain</span>
+        </h1>
+
+        <p class="hero-sub" data-en="Bot Bro turns any website into a smart AI chatbot in 60 seconds. Answer queries, capture leads &amp; close orders — even while you sleep. Starting from ৳499/month." data-bn="Bot Bro মাত্র ৬০ সেকেন্ডে আপনার ওয়েবসাইটকে একটি স্মার্ট AI চ্যাটবটে রূপান্তর করে। প্রশ্নের উত্তর দিন, লিড সংগ্রহ করুন এবং অর্ডার নিন — ঘুমের মধ্যেও। মাত্র ৳৪৯৯/মাস থেকে।">
+            Bot Bro turns any website into a smart AI chatbot in 60 seconds. Answer queries, capture leads &amp; close orders — even while you sleep. Starting from <strong style="color:var(--orange)">৳499/month</strong>.
+        </p>
+
+        <div class="hero-cta">
+            <a href="dashboard/signup.html" class="btn btn-primary btn-lg" data-en="🚀 Start Free – 60 Second Setup" data-bn="🚀 বিনামূল্যে শুরু – ৬০ সেকেন্ড সেটআপ">🚀 Start Free – 60 Second Setup</a>
+            <a href="#how" class="btn btn-outline btn-lg" data-en="See How It Works ↓" data-bn="কীভাবে কাজ করে দেখুন ↓">See How It Works ↓</a>
+        </div>
+
+        <!-- Stats Ticker -->
+        <div class="stats-ticker">
+          <div class="ticker-track">
+            <span>⚡ 500+ Businesses</span>
+            <span>🕷️ 2M+ Conversations</span>
+            <span>⭐ 4.9/5 Rating</span>
+            <span>🇧🇩 Bangladesh's #1 AI Chatbot</span>
+            <span>🚀 60-Second Setup</span>
+            <span>⚡ 500+ Businesses</span>
+            <span>🕷️ 2M+ Conversations</span>
+            <span>⭐ 4.9/5 Rating</span>
+            <span>🇧🇩 Bangladesh's #1 AI Chatbot</span>
+            <span>🚀 60-Second Setup</span>
+          </div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-num" id="stat-bots">500+</div>
+                <div class="stat-label" data-en="Bots Trained" data-bn="বট প্রশিক্ষিত">Bots Trained</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">60s</div>
+                <div class="stat-label" data-en="Setup Time" data-bn="সেটআপ সময়">Setup Time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">99.9%</div>
+                <div class="stat-label" data-en="Uptime" data-bn="আপটাইম">Uptime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num">24/7</div>
+                <div class="stat-label" data-en="Always Active" data-bn="সর্বদা সক্রিয়">Always Active</div>
+            </div>
+        </div>
+
+        <!-- 3D Mockup -->
+        <div class="hero-mockup">
+            <div class="mockup-3d-wrapper">
+                <div class="mockup-shell">
+                    <div class="mockup-title-bar">
+                        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                        <div class="mockup-url-bar">https://yourwebsite.com · AI Bot Active ✓</div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="mockup-panel">
+                            <h4>⚙️ Bot Bro Builder</h4>
+                            <div class="mockup-stat"><div class="dot-sm"></div><span data-en="153 pages indexed &amp; trained" data-bn="১৫৩টি পেইজ ইন্ডেক্স করা হয়েছে">153 pages indexed &amp; trained</span></div>
+                            <div class="mockup-stat"><div class="dot-sm" style="background:#fbbf24;box-shadow:0 0 8px #fbbf24"></div><span data-en="Vectorizing... 100%" data-bn="ভেক্টরাইজিং... ১০০%">Vectorizing... 100%</span></div>
+                            <div class="mockup-stat"><div class="dot-sm" style="background:var(--accent);box-shadow:0 0 8px var(--accent)"></div><span data-en="Widget live ✓" data-bn="উইজেট লাইভ ✓">Widget live ✓</span></div>
+                        </div>
+                        <div class="mockup-panel">
+                            <h4>💬 <span data-en="Live Chat Preview" data-bn="লাইভ চ্যাট প্রিভিউ">Live Chat Preview</span></h4>
+                            <div class="chat-bubble-bot" id="demo-bot-1">আমি কি আপনাকে সাহায্য করতে পারি? 😊</div>
+                            <div class="chat-bubble-user" data-en="What are your prices?" data-bn="আপনার দাম কত?">What are your prices?</div>
+                            <div class="chat-bubble-bot" id="demo-bot-2" data-en="Basic plan starts at ৳499/mo — pay via bKash!" data-bn="বেসিক প্ল্যান মাত্র ৳৪৯৯/মাস — bKash এ পেমেন্ট করুন!">Basic plan starts at ৳499/mo — pay via bKash!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ TRUST BANNER ═══ -->
+<section id="trust">
+    <div class="trust-inner">
+        <span class="trust-label" data-en="Trusted by businesses across" data-bn="বিভিন্ন শিল্পের ব্যবসায়ীদের আস্থা">Trusted by businesses across</span>
+        <div class="trust-logos">
+            <span class="trust-logo">E-COMMERCE</span>
+            <span class="trust-logo">REAL ESTATE</span>
+            <span class="trust-logo">EDUCATION</span>
+            <span class="trust-logo">HEALTHCARE</span>
+            <span class="trust-logo">AGENCIES</span>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PROBLEM ═══ -->
+<section id="problem">
+    <div class="container">
+        <div class="section-tag red reveal" data-en="😰 The Problem" data-bn="😰 সমস্যা">😰 The Problem</div>
+        <h2 class="section-title reveal" data-en="Your Website Is Losing Money Every Night." data-bn="আপনার ওয়েবসাইট প্রতি রাতে আয় হারাচ্ছে।">Your Website Is Losing<br>Money Every Night.</h2>
+        <p class="section-sub reveal" data-en="While you sleep, visitors land on your site with questions — and leave without answers. That's revenue walking out the door." data-bn="আপনি যখন ঘুমাচ্ছেন, ভিজিটররা আপনার সাইটে আসছে প্রশ্ন নিয়ে — কিন্তু উত্তর না পেয়ে চলে যাচ্ছে। এটা আপনার আয় চুরি হয়ে যাওয়া।">
+            While you sleep, visitors land on your site with questions — and leave without answers. That's revenue walking out the door.
+        </p>
+        <div class="problem-grid">
+            <div class="problem-card reveal">
+                <span class="problem-icon">🌙</span>
+                <h3 data-en="Visitors Leave at Night" data-bn="রাতে ভিজিটররা চলে যায়">Visitors Leave at Night</h3>
+                <p data-en="70% of website visitors arrive after business hours. With no one to answer them, they bounce to your competitors. You lose the sale before it begins." data-bn="৭০% ওয়েবসাইট ভিজিটর ব্যবসার সময়ের পরে আসে। কেউ উত্তর না দিলে তারা প্রতিযোগীদের কাছে চলে যায়। বিক্রি শুরুর আগেই হেরে যান।">70% of website visitors arrive after business hours. With no one to answer them, they bounce to your competitors. You lose the sale before it begins.</p>
+            </div>
+            <div class="problem-card reveal">
+                <span class="problem-icon">❓</span>
+                <h3 data-en="Unanswered Questions = Lost Leads" data-bn="অনুত্তরিত প্রশ্ন = হারানো লিড">Unanswered Questions = Lost Leads</h3>
+                <p data-en="Customers have questions about products, prices, and policies. Every unanswered question is a potential customer you've already lost." data-bn="গ্রাহকদের পণ্য, দাম এবং নীতি সম্পর্কে প্রশ্ন আছে। প্রতিটি অনুত্তরিত প্রশ্ন একজন সম্ভাব্য গ্রাহক যাকে আপনি হারিয়েছেন।">Customers have questions about products, prices, and policies. Every unanswered question is a potential customer you've already lost.</p>
+            </div>
+            <div class="problem-card reveal">
+                <span class="problem-icon">💸</span>
+                <h3 data-en="Support Staff is Expensive" data-bn="সাপোর্ট স্টাফ ব্যয়বহুল">Support Staff is Expensive</h3>
+                <p data-en="Hiring human agents to handle repetitive queries costs thousands per month. And they can only handle one conversation at a time." data-bn="পুনরাবৃত্তিমূলক প্রশ্ন সামলাতে মানুষ নিয়োগ করতে মাসে হাজার হাজার টাকা লাগে। আর তারা একসাথে মাত্র একটি কথোপকথন পরিচালনা করতে পারে।">Hiring human agents to handle repetitive queries costs thousands per month. And they can only handle one conversation at a time.</p>
+            </div>
+            <div class="problem-card reveal">
+                <span class="problem-icon">📉</span>
+                <h3 data-en="Generic Chatbots Don't Know Your Business" data-bn="সাধারণ চ্যাটবট আপনার ব্যবসা জানে না">Generic Chatbots Don't Know Your Business</h3>
+                <p data-en="Old-school chatbots give scripted, irrelevant answers. Customers feel ignored. Your brand reputation suffers." data-bn="পুরনো ধাঁচের চ্যাটবট স্ক্রিপ্টেড, অপ্রাসঙ্গিক উত্তর দেয়। গ্রাহকরা অবহেলিত অনুভব করে। আপনার ব্র্যান্ডের সুনাম ক্ষতিগ্রস্ত হয়।">Old-school chatbots give scripted, irrelevant answers. Customers feel ignored. Your brand reputation suffers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ SOLUTION ═══ -->
+<section id="solution">
+    <div class="container">
+        <div class="section-tag reveal" data-en="✅ Our Solution" data-bn="✅ আমাদের সমাধান">✅ Our Solution</div>
+        <h2 class="section-title reveal">
+            <span data-en="Bot Bro: The AI That Actually Knows Your Site." data-bn="Bot Bro: যে AI সত্যিই আপনার সাইট জানে।">Bot Bro: The AI That<br><span style="color:var(--accent)">Actually Knows Your Site.</span></span>
+        </h2>
+        <p class="section-sub reveal" data-en="We read every page of your website, train a custom AI model on it, and deploy a smart chatbot that answers like your best sales rep — 24/7." data-bn="আমরা আপনার ওয়েবসাইটের প্রতিটি পেইজ পড়ি, একটি কাস্টম AI মডেল প্রশিক্ষণ দিই, এবং এমন একটি চ্যাটবট মোতায়েন করি যা আপনার সেরা বিক্রয় প্রতিনিধির মতো উত্তর দেয় — ২৪/৭।">
+            We read every page of your website, train a custom AI model on it, and deploy a smart chatbot that answers like your best sales rep — 24/7.
+        </p>
+        <div class="solution-grid">
+            <div class="solution-card reveal">
+                <div class="sol-icon">⚡</div>
+                <h3 data-en="60-Second AI Training" data-bn="৬০ সেকেন্ড AI প্রশিক্ষণ">60-Second AI Training</h3>
+                <p data-en="Enter your URL. We crawl every page, extract all knowledge, and build a semantic vector brain. Done in under a minute. No technical setup required." data-bn="আপনার URL দিন। আমরা প্রতিটি পেইজ ক্রল করি, সব তথ্য বের করি, এবং একটি সেমান্টিক ভেক্টর ব্রেইন তৈরি করি। এক মিনিটেরও কম সময়ে। কোনো প্রযুক্তিগত সেটআপ দরকার নেই।">Enter your URL. We crawl every page, extract all knowledge, and build a semantic vector brain. Done in under a minute. No technical setup required.</p>
+            </div>
+            <div class="solution-card reveal">
+                <div class="sol-icon">🧠</div>
+                <h3 data-en="Context-Aware Intelligence" data-bn="প্রসঙ্গ-সচেতন বুদ্ধিমত্তা">Context-Aware Intelligence</h3>
+                <p data-en="Our AI remembers the entire conversation. It doesn't ask for your name twice. It understands follow-up questions and handles multi-turn dialogues naturally." data-bn="আমাদের AI পুরো কথোপকথন মনে রাখে। এটি দুবার আপনার নাম জিজ্ঞেস করে না। এটি ফলো-আপ প্রশ্ন বোঝে এবং স্বাভাবিকভাবে বহু-পর্যায়ের কথোপকথন পরিচালনা করে।">Our AI remembers the entire conversation. It doesn't ask for your name twice. It understands follow-up questions and handles multi-turn dialogues naturally.</p>
+            </div>
+            <div class="solution-card reveal">
+                <div class="sol-icon">📈</div>
+                <h3 data-en="Automatic Lead Capture" data-bn="স্বয়ংক্রিয় লিড ক্যাপচার">Automatic Lead Capture</h3>
+                <p data-en="The bot collects phone numbers, emails, and orders within the chat — converting every conversation into a business opportunity you can follow up on." data-bn="বট চ্যাটের মধ্যে ফোন নম্বর, ইমেইল এবং অর্ডার সংগ্রহ করে — প্রতিটি কথোপকথনকে একটি ব্যবসায়িক সুযোগে রূপান্তর করে।">The bot collects phone numbers, emails, and orders within the chat — converting every conversation into a business opportunity you can follow up on.</p>
+            </div>
+            <div class="solution-card reveal">
+                <div class="sol-icon">🎨</div>
+                <h3 data-en="Brand-Matched Design" data-bn="ব্র্যান্ড-ম্যাচড ডিজাইন">Brand-Matched Design</h3>
+                <p data-en="Customize colors, name, avatar, and welcome message to match your brand. Looks like it was built just for you — because it was." data-bn="আপনার ব্র্যান্ডের সাথে মেলাতে রং, নাম, অ্যাভাটার এবং স্বাগত বার্তা কাস্টমাইজ করুন। মনে হবে শুধু আপনার জন্যই তৈরি — কারণ এটা তাই।">Customize colors, name, avatar, and welcome message to match your brand. Looks like it was built just for you — because it was.</p>
+            </div>
+            <div class="solution-card reveal">
+                <div class="sol-icon">🌐</div>
+                <h3 data-en="Any Platform, One Line" data-bn="যেকোনো প্ল্যাটফর্ম, এক লাইনে">Any Platform, One Line</h3>
+                <p data-en="WordPress, custom HTML, Shopify, Wix — one script tag is all it takes. No plugins, no API keys, no developer needed." data-bn="WordPress, কাস্টম HTML, Shopify, Wix — একটি স্ক্রিপ্ট ট্যাগই যথেষ্ট। কোনো প্লাগইন নেই, API কী নেই, ডেভেলপার লাগে না।">WordPress, custom HTML, Shopify, Wix — one script tag is all it takes. No plugins, no API keys, no developer needed.</p>
+            </div>
+            <div class="solution-card reveal">
+                <div class="sol-icon">🇧🇩</div>
+                <h3 data-en="Built for Bangladesh" data-bn="বাংলাদেশের জন্য নির্মিত">Built for Bangladesh</h3>
+                <p data-en="bKash payment accepted. BDT pricing. Bangla language support. Your AI chatbot SaaS, made right here for Bangladeshi businesses." data-bn="bKash পেমেন্ট গ্রহণযোগ্য। BDT মূল্য নির্ধারণ। বাংলা ভাষা সমর্থন। আপনার AI চ্যাটবট SaaS, বাংলাদেশি ব্যবসার জন্যই তৈরি।">bKash payment accepted. BDT pricing. Bangla language support. Your AI chatbot SaaS, made right here for Bangladeshi businesses.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section id="how">
+    <div class="container">
+        <div class="section-tag reveal" data-en="🔧 Integration" data-bn="🔧 ইন্টিগ্রেশন">🔧 Integration</div>
+        <h2 class="section-title reveal" data-en="Live on Your Site in 3 Simple Steps." data-bn="৩টি সহজ ধাপে আপনার সাইটে লাইভ।">Live on Your Site<br><span data-en="in 3 Simple Steps." data-bn="মাত্র ৩ ধাপে।">in 3 Simple Steps.</span></h2>
+        <p class="section-sub reveal" data-en="No developer. No hassle. Copy, paste, done." data-bn="কোনো ডেভেলপার নেই। কোনো ঝামেলা নেই। কপি, পেস্ট, সম্পন্ন।">No developer. No hassle. Copy, paste, done.</p>
+
+        <div class="steps-layout">
+            <div class="steps-list">
+                <div class="step-item reveal">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <h3 data-en="Create Your AI Bot" data-bn="আপনার AI বট তৈরি করুন">Create Your AI Bot</h3>
+                        <p data-en="Sign up, enter your website URL, and click 'Build AI Bot'. Our engine reads your entire site and trains a custom AI in under 60 seconds." data-bn="সাইন আপ করুন, আপনার ওয়েবসাইট URL দিন, এবং 'AI বট তৈরি করুন' ক্লিক করুন। আমাদের ইঞ্জিন আপনার পুরো সাইট পড়ে ৬০ সেকেন্ডের মধ্যে একটি কাস্টম AI প্রশিক্ষণ দেয়।">Sign up, enter your website URL, and click 'Build AI Bot'. Our engine reads your entire site and trains a custom AI in under 60 seconds.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <h3 data-en="Customize & Get Your Code" data-bn="কাস্টমাইজ করুন এবং কোড নিন">Customize &amp; Get Your Code</h3>
+                        <p data-en="Go to your dashboard. Set your brand colors, bot name, and welcome message. Then copy the single-line embed code generated for you." data-bn="আপনার ড্যাশবোর্ডে যান। ব্র্যান্ড রং, বট নাম এবং স্বাগত বার্তা সেট করুন। তারপর আপনার জন্য তৈরি এক লাইনের এমবেড কোড কপি করুন।">Go to your dashboard. Set your brand colors, bot name, and welcome message. Then copy the single-line embed code generated for you.</p>
+                    </div>
+                </div>
+                <div class="step-item reveal">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <h3 data-en="Paste & Go Live ✅" data-bn="পেস্ট করুন এবং লাইভ হন ✅">Paste &amp; Go Live ✅</h3>
+                        <p data-en="Paste the code into your website's head or footer. The AI bot appears instantly. Works on WordPress, HTML, and any platform." data-bn="কোডটি আপনার ওয়েবসাইটের head বা footer-এ পেস্ট করুন। AI বট তৎক্ষণাৎ দেখা যাবে। WordPress, HTML এবং যেকোনো প্ল্যাটফর্মে কাজ করে।">Paste the code into your website's &lt;head&gt; or footer. The AI bot appears instantly. Works on WordPress, HTML, and any platform.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="integration-panel reveal">
+                <div class="int-tab-bar">
+                    <button class="int-tab active" onclick="showTab('html', this)">HTML / Custom</button>
+                    <button class="int-tab" onclick="showTab('wordpress', this)">WordPress</button>
+                    <button class="int-tab" onclick="showTab('shopify', this)">Shopify</button>
+                </div>
+                <div class="int-body">
+                    <div class="int-content active" id="tab-html">
+                        <p data-en="Paste this single line inside your &lt;head&gt; or just before &lt;/body&gt;:" data-bn="এই একটি লাইন আপনার &lt;head&gt; এর ভেতরে বা &lt;/body&gt; এর আগে পেস্ট করুন:">Paste this single line inside your <code style="color:var(--accent)">&lt;head&gt;</code> or just before <code style="color:var(--accent)">&lt;/body&gt;</code>:</p>
+                        <div class="code-block">
+                            <button class="code-copy" onclick="copyCode('code-html')" data-en="Copy" data-bn="কপি">Copy</button>
+                            <span id="code-html">&lt;script src="https://botbro.editians.com/widget.js"
+  data-bot-id="<span style="color:#fbbf24">YOUR_BOT_ID</span>"&gt;
+&lt;/script&gt;</span>
+                        </div>
+                    </div>
+                    <div class="int-content" id="tab-wordpress">
+                        <p data-en='Install "Insert Headers and Footers" plugin from WordPress. Go to Settings → Insert Headers and Footers → paste in Footer Scripts.' data-bn='"Insert Headers and Footers" প্লাগইন WordPress থেকে ইনস্টল করুন। Settings → Insert Headers and Footers যান → Footer Scripts-এ পেস্ট করুন।'>Install <em>"Insert Headers and Footers"</em> plugin from WordPress. Go to <em>Settings → Insert Headers and Footers</em> → paste in Footer Scripts.</p>
+                        <div class="code-block" style="margin-top:14px">
+                            <button class="code-copy" onclick="copyCode('code-wp')" data-en="Copy" data-bn="কপি">Copy</button>
+                            <span id="code-wp">&lt;script src="https://botbro.editians.com/widget.js"
+  data-bot-id="<span style="color:#fbbf24">YOUR_BOT_ID</span>"&gt;
+&lt;/script&gt;</span>
+                        </div>
+                    </div>
+                    <div class="int-content" id="tab-shopify">
+                        <p data-en="In Shopify Admin: Online Store → Themes → Edit Code → open theme.liquid → paste just before &lt;/body&gt;." data-bn="Shopify Admin-এ: Online Store → Themes → Edit Code → theme.liquid খুলুন → &lt;/body&gt; এর আগে পেস্ট করুন।">In Shopify Admin: <em>Online Store → Themes → Edit Code</em> → open <code style="color:var(--accent)">theme.liquid</code> → paste just before <code style="color:var(--accent)">&lt;/body&gt;</code>.</p>
+                        <div class="code-block" style="margin-top:14px">
+                            <button class="code-copy" onclick="copyCode('code-shopify')" data-en="Copy" data-bn="কপি">Copy</button>
+                            <span id="code-shopify">&lt;script src="https://botbro.editians.com/widget.js"
+  data-bot-id="<span style="color:#fbbf24">YOUR_BOT_ID</span>"&gt;
+&lt;/script&gt;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PRICING ═══ -->
+<section id="pricing">
+    <div class="container">
+        <div style="text-align:center">
+            <div class="section-tag purple reveal" style="display:inline-flex" data-en="💰 Pricing in BDT" data-bn="💰 BDT-তে মূল্য">💰 Pricing in BDT</div>
+            <h2 class="section-title reveal" data-en="Simple, Honest Pricing. Pay in Taka via bKash." data-bn="সহজ, সৎ মূল্য। bKash এ টাকায় পেমেন্ট করুন।">Simple, Honest Pricing.<br><span data-en="Pay in Taka via bKash." data-bn="bKash এ টাকায় পেমেন্ট করুন।">Pay in Taka via bKash.</span></h2>
+            <p class="section-sub reveal" style="margin:0 auto" data-en="No hidden fees. No USD conversion headaches. Pay in ৳ Bengali Taka with bKash — the way Bangladesh does business." data-bn="কোনো লুকানো চার্জ নেই। USD রূপান্তরের ঝামেলা নেই। bKash এ ৳ বাংলা টাকায় পেমেন্ট করুন — এটাই বাংলাদেশের ব্যবসার পথ।">No hidden fees. No USD conversion headaches. Pay in ৳ Bengali Taka with bKash — the way Bangladesh does business.</p>
+        </div>
+
+        <!-- Monthly/Annual Toggle -->
+        <div class="pricing-toggle-wrap reveal">
+            <div class="pricing-toggle">
+                <button class="ptog-btn active" id="ptog-monthly" onclick="setPricingPeriod('monthly')" data-en="Monthly" data-bn="মাসিক">Monthly</button>
+                <button class="ptog-btn" id="ptog-annual" onclick="setPricingPeriod('annual')">
+                    <span data-en="Annual" data-bn="বার্ষিক">Annual</span>
+                    <span class="ptog-badge" data-en="Save 20%" data-bn="২০% সাশ্রয়">Save 20%</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="pricing-card reveal">
+                <div class="plan-name" data-en="Free" data-bn="বিনামূল্যে">Free</div>
+                <div class="plan-price-bdt"><span class="currency">৳</span><span class="price-val" data-monthly="0" data-annual="0">0</span></div>
+                <div class="plan-price-usd" data-en="Free forever · ভালো শুরু করুন" data-bn="চিরকাল বিনামূল্যে · ভালো শুরু করুন">Free forever · ভালো শুরু করুন</div>
+                <hr class="plan-divider">
+                <ul class="plan-features">
+                    <li><span class="check">✓</span><span data-en="1 AI Chatbot" data-bn="১টি AI চ্যাটবট">1 AI Chatbot</span></li>
+                    <li><span class="check">✓</span><span data-en="1 Website Integration" data-bn="১টি ওয়েবসাইট ইন্টিগ্রেশন">1 Website Integration</span></li>
+                    <li><span class="check">✓</span><span data-en="10 Conversations/mo" data-bn="১০টি কনভারসেশন/মাস">10 Conversations/mo</span></li>
+                    <li><span class="x">✗</span><span data-en="Lead Capture" data-bn="লিড ক্যাপচার">Lead Capture</span></li>
+                    <li><span class="x">✗</span><span data-en="Remove Branding" data-bn="ব্র্যান্ডিং সরান">Remove Branding</span></li>
+                </ul>
+                <a href="dashboard/signup.html" class="btn btn-outline" style="text-align:center;display:block" data-en="Start Free" data-bn="বিনামূল্যে শুরু করুন">Start Free</a>
+            </div>
+
+            <!-- Basic (Featured) -->
+            <div class="pricing-card featured reveal">
+                <div class="plan-badge" data-en="⭐ Most Popular" data-bn="⭐ সবচেয়ে জনপ্রিয়">⭐ Most Popular</div>
+                <div class="plan-name" data-en="Basic" data-bn="বেসিক">Basic</div>
+                <div class="plan-price-bdt"><span class="currency">৳</span><span class="price-val" data-monthly="499" data-annual="399">499</span></div>
+                <div class="plan-price-usd"><span data-en="/month" data-bn="/মাস">/month</span></div>
+                <hr class="plan-divider">
+                <ul class="plan-features">
+                    <li><span class="check">✓</span><span data-en="3 Custom AI Bots" data-bn="৩টি কাস্টম AI বট">3 Custom AI Bots</span></li>
+                    <li><span class="check">✓</span><span data-en="Unlimited pages trained" data-bn="সীমাহীন পেইজ প্রশিক্ষণ">Unlimited pages trained</span></li>
+                    <li><span class="check">✓</span><span data-en="1,000 Conversations/mo" data-bn="১,০০০ কনভারসেশন/মাস">1,000 Conversations/mo</span></li>
+                    <li><span class="check">✓</span><span data-en="Lead capture" data-bn="লিড ক্যাপচার">Lead capture</span></li>
+                    <li><span class="check">✓</span><span data-en="Remove Bot Bro branding" data-bn="Bot Bro ব্র্যান্ডিং সরান">Remove Bot Bro branding</span></li>
+                </ul>
+                <a href="dashboard/billing.html" class="btn btn-bkash" style="text-align:center;display:block" data-en="💳 Pay with bKash" data-bn="💳 bKash দিয়ে পেমেন্ট করুন">💳 Pay with bKash</a>
+                <div class="bkash-badge">
+                    <span>📱</span>
+                    <span data-en="Send ৳499 to 01302450710 · Submit TXN ID" data-bn="01302450710 নম্বরে ৳৪৯৯ পাঠান · TXN ID জমা দিন">Send ৳499 to 01302450710 · Submit TXN ID</span>
+                </div>
+            </div>
+
+            <!-- Pro -->
+            <div class="pricing-card reveal">
+                <div class="plan-name" data-en="Pro" data-bn="প্রো">Pro</div>
+                <div class="plan-price-bdt"><span class="currency">৳</span><span class="price-val" data-monthly="999" data-annual="799">999</span></div>
+                <div class="plan-price-usd"><span data-en="/month" data-bn="/মাস">/month</span></div>
+                <hr class="plan-divider">
+                <ul class="plan-features">
+                    <li><span class="check">✓</span><span data-en="Unlimited Custom AI Bots" data-bn="সীমাহীন কাস্টম AI বট">Unlimited Custom AI Bots</span></li>
+                    <li><span class="check">✓</span><span data-en="Unlimited everything" data-bn="সবকিছু সীমাহীন">Unlimited everything</span></li>
+                    <li><span class="check">✓</span><span data-en="Unlimited Conversations" data-bn="সীমাহীন কনভারসেশন">Unlimited Conversations</span></li>
+                    <li><span class="check">✓</span><span data-en="Priority support" data-bn="প্রাধান্যমূলক সাপোর্ট">Priority support</span></li>
+                </ul>
+                <a href="dashboard/billing.html" class="btn" style="text-align:center;display:block;background:rgba(226,19,110,0.08);border:1px solid rgba(226,19,110,0.3);color:#ff6ba8" data-en="💳 Pay with bKash" data-bn="💳 bKash দিয়ে পেমেন্ট করুন">💳 Pay with bKash</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ BKASH HOW TO PAY ═══ -->
+<section id="bkash-info">
+    <div class="container">
+        <div class="section-tag pink reveal" data-en="💳 How to Pay" data-bn="💳 কীভাবে পেমেন্ট করবেন">💳 How to Pay</div>
+        <h2 class="section-title reveal" data-en="Pay Easily with bKash. Upgrade in Minutes." data-bn="bKash দিয়ে সহজে পেমেন্ট করুন। মিনিটে আপগ্রেড করুন।">Pay Easily with bKash.<br><span data-en="Upgrade in Minutes." data-bn="মিনিটে আপগ্রেড করুন।">Upgrade in Minutes.</span></h2>
+        <p class="section-sub reveal" data-en="No bank account needed. No foreign currency hassle. Pure Bangladesh payment." data-bn="কোনো ব্যাংক অ্যাকাউন্টের দরকার নেই। বিদেশী মুদ্রার ঝামেলা নেই। পুরোপুরি বাংলাদেশি পেমেন্ট।">No bank account needed. No foreign currency hassle. Pure Bangladesh payment.</p>
+
+        <div class="bkash-layout">
+            <div class="bkash-steps">
+                <div class="bkash-step reveal">
+                    <div class="bkash-step-num">1</div>
+                    <p><strong data-en="Choose Your Plan" data-bn="আপনার প্ল্যান বেছে নিন">Choose Your Plan</strong><span data-en='Click "Pay with bKash" on any paid plan. Note the exact amount and our bKash number.' data-bn='"bKash দিয়ে পেমেন্ট করুন" ক্লিক করুন। সঠিক পরিমাণ এবং আমাদের bKash নম্বর নোট করুন।'>Click "Pay with bKash" on any paid plan. Note the exact amount and our bKash number.</span></p>
+                </div>
+                <div class="bkash-step reveal">
+                    <div class="bkash-step-num">2</div>
+                    <p><strong data-en="Send Payment via bKash App" data-bn="bKash অ্যাপে পেমেন্ট পাঠান">Send Payment via bKash App</strong><span data-en='Open your bKash app, go to "Send Money", enter our number and the plan amount.' data-bn='আপনার bKash অ্যাপ খুলুন, "Send Money"-তে যান, আমাদের নম্বর এবং প্ল্যানের পরিমাণ দিন।'>Open your bKash app, go to "Send Money", enter our number and the plan amount.</span></p>
+                </div>
+                <div class="bkash-step reveal">
+                    <div class="bkash-step-num">3</div>
+                    <p><strong data-en="Submit Your Transaction ID" data-bn="আপনার লেনদেন আইডি জমা দিন">Submit Your Transaction ID</strong><span data-en="Come back to your Bot Bro dashboard, click 'Submit bKash Payment', and enter the TXN ID from your bKash receipt." data-bn="আপনার Bot Bro ড্যাশবোর্ডে ফিরে আসুন, 'bKash পেমেন্ট জমা দিন' ক্লিক করুন, এবং bKash রসিদ থেকে TXN ID দিন।">Come back to your Bot Bro dashboard, click 'Submit bKash Payment', and enter the TXN ID from your bKash receipt.</span></p>
+                </div>
+                <div class="bkash-step reveal">
+                    <div class="bkash-step-num">4</div>
+                    <p><strong data-en="Activated within 1 Hour" data-bn="১ ঘণ্টার মধ্যে সক্রিয়">Activated within 1 Hour</strong><span data-en="Our team verifies your payment and upgrades your account. You'll see your new plan active in the dashboard." data-bn="আমাদের টিম আপনার পেমেন্ট যাচাই করে আপনার অ্যাকাউন্ট আপগ্রেড করে। ড্যাশবোর্ডে আপনার নতুন প্ল্যান সক্রিয় দেখতে পাবেন।">Our team verifies your payment and upgrades your account. You'll see your new plan active in the dashboard.</span></p>
+                </div>
+            </div>
+
+            <div class="bkash-card reveal">
+                <div class="bkash-card-content">
+                    <div class="bkash-card-logo">📱</div>
+                    <h3 data-en="bKash Payment Details" data-bn="bKash পেমেন্টের বিবরণ">bKash Payment Details</h3>
+                    <p data-en="Send your payment to our official bKash account. Always include a reference note with your registered email." data-bn="আমাদের অফিসিয়াল bKash অ্যাকাউন্টে পেমেন্ট পাঠান। সবসময় আপনার নিবন্ধিত ইমেইল সহ একটি রেফারেন্স নোট অন্তর্ভুক্ত করুন।">Send your payment to our official bKash account. Always include a reference note with your registered email.</p>
+                    <div class="bkash-number">
+                        <small data-en="Official bKash Number" data-bn="অফিসিয়াল bKash নম্বর">Official bKash Number</small>
+                        01302450710
+                    </div>
+                    <a href="dashboard/billing.html" class="btn" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);width:100%;display:block;text-align:center" data-en="Submit My Payment →" data-bn="আমার পেমেন্ট জমা দিন →">Submit My Payment →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section id="testimonials">
+    <div class="container">
+        <div style="text-align:center">
+            <div class="section-tag reveal" style="display:inline-flex" data-en="🌟 Success Stories" data-bn="🌟 সাফল্যের গল্প">🌟 Success Stories</div>
+            <h2 class="section-title reveal" data-en="Bangladeshi Businesses Love Bot Bro." data-bn="বাংলাদেশি ব্যবসায়ীরা Bot Bro ভালোবাসে।">Bangladeshi Businesses<br>Love <span style="color:var(--accent)">Bot Bro.</span></h2>
+        </div>
+        <!-- Carousel -->
+        <div class="carousel-wrapper" id="testimonial-carousel">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Card 1 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"আমাদের ই-কমার্স সাইটে বসানোর পর থেকে রাতেও অর্ডার আসছে। AI বটটা সব প্রশ্নের উত্তর দিচ্ছে নিজেই। অসাধারণ সার্ভিস!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(185,100%,35%)">R</div>
+                        <div class="author-name">Rafiq Al Islam</div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"We integrated it on our real estate site in literally 2 minutes. The bot now handles 80% of client inquiries automatically. Worth every taka."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(320,80%,40%)">S</div>
+                        <div class="author-name">Sharmin Akhtar</div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"bKash দিয়ে পেমেন্ট করা অনেক সহজ ছিল। Upgrade হওয়ার পর আমাদের lead capture দ্বিগুণ হয়ে গেছে।"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(25,90%,38%)">K</div>
+                        <div class="author-name">Kareem Hussain</div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The Bot Bro AI is incredibly fast. We barely had to train it, it read our site perfectly. Amazing for customer support!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(265,70%,50%)">M</div>
+                        <div class="author-name">Mehedi Hasan</div>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Dashboard টা অনেক সুন্দর। বট সেটআপ করতে ৬০ সেকেন্ডও লাগেনি। এত সহজ হবে ভাবিনি!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(150,80%,28%);color:#fff">T</div>
+                        <div class="author-name">Tanjilur Rahman</div>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Our restaurant started getting late-night orders because the bot answers all menu queries 24/7. Incredible ROI!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(45,100%,38%);color:#000">N</div>
+                        <div class="author-name">Nadia Islam</div>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"আমি tech জানি না কিন্তু Bot Bro সেট করতে কোনো সমস্যাই হয়নি। কাস্টমার সাপোর্ট দিন রাত কাজ করছে।"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(200,90%,32%)">F</div>
+                        <div class="author-name">Faisal Ahmed</div>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Best investment for our salon booking website. Clients now book appointments through the bot instead of calling us!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background:hsl(340,75%,45%)">P</div>
+                        <div class="author-name">Priya Sharma</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Dot Indicators -->
+        <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
+</section>
+
+<!-- ═══ CTA BANNER ═══ -->
+<section id="cta-banner">
+    <div class="cta-inner reveal">
+        <h2 data-en="Ready to Give Your Website an AI Brain?" data-bn="আপনার ওয়েবসাইটকে AI ব্রেইন দিতে প্রস্তুত?">Ready to Give Your Website<br>an AI Brain?</h2>
+        <p data-en="Join hundreds of Bangladeshi businesses using Bot Bro. Start free. No credit card. Pay with bKash when you're ready to grow." data-bn="Bot Bro ব্যবহার করা শত শত বাংলাদেশি ব্যবসায়ীর সাথে যোগ দিন। বিনামূল্যে শুরু করুন। কোনো ক্রেডিট কার্ড নেই। বাড়তে প্রস্তুত হলে bKash দিয়ে পেমেন্ট করুন।">Join hundreds of Bangladeshi businesses using Bot Bro.<br>Start free. No credit card. Pay with bKash when you're ready to grow.</p>
+        <div class="cta-buttons">
+            <a href="dashboard/signup.html" class="btn btn-primary btn-lg" data-en="🚀 Get Started Free" data-bn="🚀 বিনামূল্যে শুরু করুন">🚀 Get Started Free</a>
+            <a href="#pricing" class="btn btn-outline btn-lg" data-en="See Plans →" data-bn="প্ল্যান দেখুন →">See Plans →</a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a href="#" class="logo" style="font-size:20px">
+                <div class="logo-icon" style="width:28px;height:28px;font-size:14px">🕷️</div>
+                <div>
+                    <div class="logo-text"><span class="bot">Bot</span><span class="hub">Hub</span></div>
+                    <span class="logo-sub">by Editians</span>
+                </div>
+            </a>
+            <p data-en="Bangladesh's AI chatbot SaaS. Turn any website into a 24/7 AI assistant. bKash payment accepted." data-bn="বাংলাদেশের AI চ্যাটবট SaaS। যেকোনো ওয়েবসাইটকে ২৪/৭ AI সহকারীতে পরিণত করুন। bKash পেমেন্ট গ্রহণযোগ্য।">Bangladesh's AI chatbot SaaS. Turn any website into a 24/7 AI assistant. bKash payment accepted.</p>
+        </div>
+        <div class="footer-col">
+            <h5 data-en="Product" data-bn="পণ্য">Product</h5>
+            <a href="#solution" data-en="Features" data-bn="বৈশিষ্ট্য">Features</a>
+            <a href="#pricing" data-en="Pricing" data-bn="মূল্য">Pricing</a>
+            <a href="#how" data-en="Integration" data-bn="ইন্টিগ্রেশন">Integration</a>
+            <a href="#bkash-info" data-en="bKash Payment" data-bn="bKash পেমেন্ট">bKash Payment</a>
+        </div>
+        <div class="footer-col">
+            <h5 data-en="Account" data-bn="অ্যাকাউন্ট">Account</h5>
+            <a href="dashboard/signup.html" data-en="Sign Up" data-bn="সাইন আপ">Sign Up</a>
+            <a href="dashboard/login.html" data-en="Log In" data-bn="লগ ইন">Log In</a>
+            <a href="dashboard/billing.html" data-en="Billing" data-bn="বিলিং">Billing</a>
+        </div>
+        <div class="footer-col">
+            <h5 data-en="Contact" data-bn="যোগাযোগ">Contact</h5>
+            <a href="mailto:support@editians.com">📧 support@editians.com</a>
+            <a href="https://wa.me/8801302450710" target="_blank">📱 01302450710 (bKash &amp; WhatsApp)</a>
+            <a href="#">🇧🇩 Dhaka, Bangladesh</a>
+            <a href="#">🌐 botbro.editians.com</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p data-en="© 2026 Bot Bro by Editians. All rights reserved. Made with ❤️ in Bangladesh 🇧🇩" data-bn="© ২০২৬ Bot Bro by Editians। সর্বস্বত্ব সংরক্ষিত। ❤️ দিয়ে বাংলাদেশে তৈরি 🇧🇩">© 2026 Bot Bro by Editians. All rights reserved. Made with ❤️ in Bangladesh 🇧🇩</p>
+        <div class="footer-bkash-note">
+            <span>📱</span> bKash Payment Accepted · ৳ BDT Pricing
+        </div>
+    </div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     ARIA – HOMEPAGE BOT WIDGET
+═══════════════════════════════════════ -->
+<div id="aria-launcher" onclick="toggleAria()" title="Chat with Aria">
+    <div class="aria-pulse"></div>
+    <div class="aria-avatar-inner">🕷️</div>
+    <div class="aria-name-tag" data-en="Ask Aria" data-bn="Aria কে জিজ্ঞেস করুন">Ask Aria</div>
+</div>
+
+<div id="aria-panel">
+    <div class="aria-header">
+        <div class="aria-header-left">
+            <div class="aria-avatar">🕷️<div class="aria-status-dot"></div></div>
+            <div>
+                <div class="aria-header-name">Aria</div>
+                <div class="aria-header-sub" data-en="Bot Bro Assistant · Online" data-bn="Bot Bro সহকারী · অনলাইন">Bot Bro Assistant · Online</div>
+            </div>
+        </div>
+        <button class="aria-close" onclick="toggleAria()">✕</button>
+    </div>
+    <div class="aria-messages" id="aria-messages">
+        <div class="aria-msg bot">
+            <div class="aria-msg-avatar">🕷️</div>
+            <div class="aria-msg-bubble" id="aria-welcome-msg">
+                Hey there! 👋 I'm <strong>Aria</strong>, your Bot Bro guide.<br><br>
+                Ask me about pricing, bKash payment, how to integrate, or anything else! 🚀
+            </div>
+        </div>
+    </div>
+    <div class="aria-suggestions" id="aria-suggestions">
+        <button onclick="sendAriaQuick('How does Bot Bro work?')" data-en="How does it work?" data-bn="এটা কীভাবে কাজ করে?">How does it work?</button>
+        <button onclick="sendAriaQuick('What are the pricing plans?')" data-en="Pricing plans?" data-bn="মূল্য পরিকল্পনা?">Pricing plans?</button>
+        <button onclick="sendAriaQuick('How to pay with bKash?')" data-en="Pay with bKash?" data-bn="bKash দিয়ে পেমেন্ট?">Pay with bKash?</button>
+    </div>
+    <div class="aria-input-wrap">
+        <input type="text" id="aria-input" placeholder="Ask me anything..." data-en-placeholder="Ask me anything about Bot Bro..." data-bn-placeholder="Bot Bro সম্পর্কে যেকোনো প্রশ্ন করুন..." onkeydown="if(event.key==='Enter') sendAria()">
+        <button class="aria-send" onclick="sendAria()">➤</button>
+    </div>
+</div>
+
+<style>
+#aria-launcher {
+    position:fixed;bottom:30px;right:30px;z-index:9000;
+    width:64px;height:64px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex-direction:column;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+    box-shadow:0 8px 32px var(--accent-glow);
+    transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    animation:ariaFloat 3s ease-in-out infinite;
+}
+@keyframes ariaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+#aria-launcher:hover{transform:scale(1.1) translateY(-4px);box-shadow:0 16px 48px var(--accent-glow)}
+#aria-launcher.open{animation:none;transform:rotate(10deg) scale(1.05)}
+.aria-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--border-accent);animation:ariaPulse 2s ease-out infinite}
+@keyframes ariaPulse{0%{transform:scale(1);opacity:0.8}100%{transform:scale(1.5);opacity:0}}
+.aria-avatar-inner{font-size:26px;line-height:1}
+.aria-name-tag{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.85);color:var(--accent);font-size:10px;font-weight:700;padding:3px 10px;border-radius:50px;white-space:nowrap;border:1px solid var(--border-accent);font-family:'Outfit',sans-serif}
+
+#aria-panel{position:fixed;bottom:110px;right:30px;z-index:9001;width:380px;max-height:560px;background:rgba(6,10,22,0.97);border:1px solid var(--border-accent);border-radius:24px;backdrop-filter:blur(24px);box-shadow:0 30px 80px rgba(0,0,0,0.7);display:none;flex-direction:column;overflow:hidden;font-family:'Outfit',sans-serif;animation:ariaSlideIn 0.35s cubic-bezier(0.4,0,0.2,1) both}
+[data-theme="light"] #aria-panel{background:rgba(255,255,255,0.97);box-shadow:0 30px 80px rgba(0,0,0,0.15)}
+#aria-panel.show{display:flex}
+@keyframes ariaSlideIn{from{opacity:0;transform:translateY(20px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.aria-header{background:linear-gradient(135deg,var(--accent-glow),var(--accent2-glow));border-bottom:1px solid var(--border-accent);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.aria-header-left{display:flex;align-items:center;gap:10px}
+.aria-avatar{width:40px;height:40px;border-radius:50%;font-size:20px;background:linear-gradient(135deg,var(--accent-glow),var(--accent2-glow));border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;position:relative}
+.aria-status-dot{width:8px;height:8px;border-radius:50%;background:#00ff88;box-shadow:0 0 8px #00ff88;position:absolute;bottom:1px;right:1px;animation:dotPulse 2s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.aria-header-name{font-size:15px;font-weight:700;color:var(--text)}
+.aria-header-sub{font-size:11px;color:var(--accent)}
+.aria-close{background:var(--border);border:1px solid var(--border);color:var(--text-dim);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:12px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif}
+.aria-close:hover{background:rgba(255,80,80,0.15);color:#ff6b6b}
+
+.aria-messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;scrollbar-width:thin;scrollbar-color:var(--border-accent) transparent}
+.aria-msg{display:flex;gap:8px;align-items:flex-end}
+.aria-msg.user{flex-direction:row-reverse}
+.aria-msg-avatar{width:28px;height:28px;border-radius:50%;font-size:13px;background:var(--accent-glow);border:1px solid var(--border-accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.aria-msg.user .aria-msg-avatar{background:var(--accent2-glow);border-color:rgba(124,58,237,0.3)}
+.aria-msg-bubble{max-width:80%;padding:11px 15px;border-radius:18px 18px 18px 4px;font-size:14px;line-height:1.55;color:var(--text);background:var(--card);border:1px solid var(--border)}
+.aria-msg.user .aria-msg-bubble{border-radius:18px 18px 4px 18px;background:linear-gradient(135deg,var(--accent-glow),var(--accent2-glow));border-color:var(--border-accent)}
+
+.aria-typing{display:flex;gap:4px;align-items:center;padding:11px 15px}
+.aria-typing span{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:typingDot 1.2s ease-in-out infinite}
+.aria-typing span:nth-child(2){animation-delay:0.2s}
+.aria-typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typingDot{0%,60%,100%{opacity:0.2;transform:translateY(0)}30%{opacity:1;transform:translateY(-5px)}}
+
+.aria-suggestions{padding:0 12px 8px;display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.aria-suggestions button{background:var(--accent-glow);border:1px solid var(--border-accent);color:var(--accent);font-size:11px;padding:5px 12px;border-radius:50px;cursor:pointer;transition:all 0.2s;font-family:'Outfit',sans-serif;font-weight:600}
+.aria-suggestions button:hover{background:var(--accent);color:#03050a;transform:translateY(-1px)}
+[data-theme="light"] .aria-suggestions button:hover { color: #fff; }
+
+.aria-input-wrap{padding:12px 14px;border-top:1px solid var(--border-accent);display:flex;gap:8px;flex-shrink:0;background:rgba(0,0,0,0.15)}
+[data-theme="light"] .aria-input-wrap{background:rgba(0,0,0,0.03)}
+.aria-input-wrap input{flex:1;background:var(--card);border:1px solid var(--border-accent);border-radius:12px;padding:10px 14px;color:var(--text);font-size:14px;outline:none;transition:border 0.2s;font-family:'Outfit',sans-serif}
+.aria-input-wrap input:focus{border-color:var(--accent)}
+.aria-input-wrap input::placeholder{color:var(--text-muted)}
+.aria-send{width:40px;height:40px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:white;font-size:15px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center}
+.aria-send:hover{transform:scale(1.08);box-shadow:0 6px 20px var(--accent-glow)}
+
+@media(max-width:480px){#aria-panel{width:calc(100vw - 20px);right:10px;bottom:100px}#aria-launcher{right:16px;bottom:16px}}
+</style>
+
+<script>
+// ══════════════════════════════════════
+// THEME SYSTEM
+// ══════════════════════════════════════
+let currentTheme = localStorage.getItem('bh_theme') || 'dark';
+let currentLang = localStorage.getItem('bh_lang') || 'en';
+
+function applyTheme(theme) {
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('theme-toggle').textContent = theme === 'dark' ? '🌙' : '☀️';
+    localStorage.setItem('bh_theme', theme);
+}
+
+function toggleTheme() {
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+}
+
+// ══════════════════════════════════════
+// LANGUAGE SYSTEM
+// ══════════════════════════════════════
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('bh_lang', lang);
+    document.documentElement.setAttribute('data-lang', lang);
+
+    // Toggle button active state
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-bn').classList.toggle('active', lang === 'bn');
+
+    // Update all translatable elements
+    document.querySelectorAll('[data-en][data-bn]').forEach(el => {
+        const text = el.getAttribute('data-' + lang);
+        if (text) {
+            // Check if element has inner HTML (bold/links) — use innerHTML only for known safe content
+            if (text.includes('<') || text.includes('&')) {
+                el.innerHTML = text;
+            } else {
+                el.textContent = text;
+            }
+        }
+    });
+
+    // Update input placeholders
+    document.querySelectorAll('[data-en-placeholder]').forEach(el => {
+        el.placeholder = el.getAttribute('data-' + lang + '-placeholder') || el.getAttribute('data-en-placeholder');
+    });
+
+    // Update Aria welcome message
+    const ariaWelcome = document.getElementById('aria-welcome-msg');
+    if (ariaWelcome) {
+        if (lang === 'bn') {
+            ariaWelcome.innerHTML = 'হ্যালো! 👋 আমি <strong>Aria</strong>, আপনার Bot Bro গাইড।<br><br>মূল্য, bKash পেমেন্ট, ইন্টিগ্রেশন বা যেকোনো বিষয়ে জিজ্ঞেস করুন! 🚀';
+        } else {
+            ariaWelcome.innerHTML = "Hey there! 👋 I'm <strong>Aria</strong>, your Bot Bro guide.<br><br>Ask me about pricing, bKash payment, how to integrate, or anything else! 🚀";
+        }
+    }
+
+    // Update html lang attribute
+    document.documentElement.lang = lang === 'bn' ? 'bn' : 'en';
+}
+
+// ══════════════════════════════════════
+// PRICING PERIOD TOGGLE
+// ══════════════════════════════════════
+let pricingPeriod = 'monthly';
+function setPricingPeriod(period) {
+    pricingPeriod = period;
+    document.getElementById('ptog-monthly').classList.toggle('active', period === 'monthly');
+    document.getElementById('ptog-annual').classList.toggle('active', period === 'annual');
+
+    document.querySelectorAll('.price-val').forEach(el => {
+        const val = parseInt(el.getAttribute('data-' + period));
+        el.textContent = val === 0 ? '0' : val.toLocaleString('en-BD');
+    });
+}
+
+// ══════════════════════════════════════
+// TAB SWITCHER (Integration panel)
+// ══════════════════════════════════════
+function showTab(tab, btn) {
+    document.querySelectorAll('.int-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.int-tab').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ══════════════════════════════════════
+// CODE COPY
+// ══════════════════════════════════════
+function copyCode(id) {
+    const el = document.getElementById(id);
+    navigator.clipboard.writeText(el.innerText).then(() => {
+        const btn = el.previousElementSibling;
+        const orig = btn.innerText;
+        btn.innerText = '✓ Copied!';
+        setTimeout(() => btn.innerText = orig, 2000);
+    });
+}
+
+// ══════════════════════════════════════
+// MOBILE NAV
+// ══════════════════════════════════════
+function toggleMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const ham = document.getElementById('hamburger');
+    nav.classList.toggle('open');
+    ham.classList.toggle('open');
+}
+function closeMobileNav() {
+    document.getElementById('mobile-nav').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+}
+
+// ══════════════════════════════════════
+// TYPING EFFECT
+// ══════════════════════════════════════
+const phrases = ['24/7 AI Brain', 'Smart Sales Rep', 'Lead Machine', 'Customer Hero'];
+const phrasesbn = ['২৪/৭ AI ব্রেইন', 'স্মার্ট সেলস রেপ', 'লিড মেশিন', 'গ্রাহক সেবক'];
+let phraseIdx = 0, charIdx = 0, deleting = false;
+const typingEl = document.getElementById('typing-target');
+typingEl.classList.add('typing-cursor');
+
+function typeEffect() {
+    const list = currentLang === 'bn' ? phrasesbn : phrases;
+    const current = list[phraseIdx % list.length];
+    if (!deleting) {
+        typingEl.textContent = current.substring(0, charIdx + 1);
+        charIdx++;
+        if (charIdx === current.length) { deleting = true; setTimeout(typeEffect, 2200); return; }
+    } else {
+        typingEl.textContent = current.substring(0, charIdx - 1);
+        charIdx--;
+        if (charIdx === 0) { deleting = false; phraseIdx++; }
+    }
+    setTimeout(typeEffect, deleting ? 55 : 90);
+}
+setTimeout(typeEffect, 1200);
+
+// ══════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('visible'), i * 70);
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ══════════════════════════════════════
+// 3D CARD TILT
+// ══════════════════════════════════════
+document.querySelectorAll('.solution-card, .problem-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-12px) perspective(800px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg)`;
+    });
+    card.addEventListener('mouseleave', () => { card.style.transform = ''; card.style.transition = 'transform 0.5s ease'; });
+    card.addEventListener('mouseenter', () => { card.style.transition = 'transform 0.1s ease'; });
+});
+
+// ══════════════════════════════════════
+// ARIA BOT
+// ══════════════════════════════════════
+const API_BASE = 'http://localhost:8000';
+let ariaOpen = false, ariaSuggestionsGone = false;
+
+function toggleAria() {
+    ariaOpen = !ariaOpen;
+    document.getElementById('aria-panel').classList.toggle('show', ariaOpen);
+    document.getElementById('aria-launcher').classList.toggle('open', ariaOpen);
+    if (ariaOpen) document.getElementById('aria-input').focus();
+}
+
+function sendAriaQuick(text) {
+    document.getElementById('aria-suggestions').style.display = 'none';
+    ariaSuggestionsGone = true;
+    document.getElementById('aria-input').value = text;
+    sendAria();
+}
+
+async function sendAria() {
+    const input = document.getElementById('aria-input');
+    const query = input.value.trim();
+    if (!query) return;
+    input.value = '';
+    if (!ariaSuggestionsGone) {
+        document.getElementById('aria-suggestions').style.display = 'none';
+        ariaSuggestionsGone = true;
+    }
+    addAriaMsg(query, 'user');
+    const tid = showAriaTyping();
+    try {
+        const res = await fetch(`${API_BASE}/homepage-query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, session_id: 'hp_' + Date.now() })
+        });
+        const data = await res.json();
+        removeAriaTyping(tid);
+        addAriaMsg(data.answer, 'bot');
+    } catch(e) {
+        removeAriaTyping(tid);
+        addAriaMsg(currentLang === 'bn'
+            ? 'এই মুহূর্তে সংযোগ সমস্যা হচ্ছে। WhatsApp করুন: +8801302450710 📱'
+            : "Having trouble connecting right now. WhatsApp us: +8801302450710 📱", 'bot');
+    }
+}
+
+function addAriaMsg(text, role) {
+    const msgs = document.getElementById('aria-messages');
+    const div = document.createElement('div');
+    div.className = `aria-msg ${role}`;
+    div.innerHTML = `<div class="aria-msg-avatar">${role === 'bot' ? '🕷️' : '👤'}</div><div class="aria-msg-bubble">${text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showAriaTyping() {
+    const msgs = document.getElementById('aria-messages');
+    const id = 'typ_' + Date.now();
+    const div = document.createElement('div');
+    div.id = id; div.className = 'aria-msg bot';
+    div.innerHTML = `<div class="aria-msg-avatar">🕷️</div><div class="aria-msg-bubble aria-typing"><span></span><span></span><span></span></div>`;
+    msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+    return id;
+}
+function removeAriaTyping(id) { const el = document.getElementById(id); if(el) el.remove(); }
+
+// Auto-open Aria after 9s
+setTimeout(() => { if (!ariaOpen) toggleAria(); }, 9000);
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+applyTheme(currentTheme);
+setLang(currentLang);
+
+// ══════════════════════════════════════
+// TESTIMONIALS CAROUSEL
+// ══════════════════════════════════════
+(function() {
+    const track = document.getElementById('carousel-track');
+    const dotsContainer = document.getElementById('carousel-dots');
+    if (!track || !dotsContainer) return;
+
+    const cards = track.querySelectorAll('.testimonial-card');
+    const total = cards.length;
+    let current = 0;
+    let isTransitioning = false;
+
+    // Determine visible cards based on viewport
+    function getVisible() {
+        return window.innerWidth <= 768 ? 1 : 3;
+    }
+
+    // Number of scrollable steps
+    function getSteps() {
+        return total - getVisible() + 1;
+    }
+
+    // Build dots
+    function buildDots() {
+        dotsContainer.innerHTML = '';
+        const steps = getSteps();
+        for (let i = 0; i < steps; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function updateDots() {
+        dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+    }
+
+    function getCardWidth() {
+        if (cards.length === 0) return 0;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 24;
+        const firstCard = cards[0];
+        return firstCard.getBoundingClientRect().width + gap;
+    }
+
+    function goTo(index, animate = true) {
+        const steps = getSteps();
+        if (!animate) {
+            track.style.transition = 'none';
+        } else {
+            track.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+        current = ((index % steps) + steps) % steps;
+        const offset = current * getCardWidth();
+        track.style.transform = `translateX(-${offset}px)`;
+        updateDots();
+    }
+
+    function next() {
+        const steps = getSteps();
+        const nextIdx = current + 1;
+        if (nextIdx >= steps) {
+            // Instant jump to 0 without animation
+            goTo(0, false);
+            // Force reflow so the instant jump registers before next animation
+            track.getBoundingClientRect();
+        } else {
+            goTo(nextIdx, true);
+        }
+    }
+
+    // Init
+    buildDots();
+    goTo(0, false);
+
+    // Auto-scroll every 3.5 seconds
+    const autoInterval = setInterval(next, 3500);
+
+    // Rebuild on resize
+    window.addEventListener('resize', () => {
+        buildDots();
+        goTo(0, false);
+    });
+})();
+</script>
+</body>
+</html>

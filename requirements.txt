@@ -1,0 +1,9 @@
+playwright
+beautifulsoup4
+chromadb
+google-generativeai
+fastapi
+uvicorn
+python-dotenv
+httpx
+sentence-transformers

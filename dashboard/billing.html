@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing & Plans – Bot Bro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #03050a;
+            --sidebar: #060810;
+            --card: rgba(12,16,26,0.9);
+            --accent: #00f0ff;
+            --accent-glow: rgba(0,240,255,0.2);
+            --accent2: #7c3aed;
+            --bkash: #e2136e;
+            --bkash-glow: rgba(226,19,110,0.25);
+            --green: #00ff88;
+            --text: #f0f4ff;
+            --text-dim: #8899bb;
+            --border: rgba(255,255,255,0.07);
+            --border-accent: rgba(0,240,255,0.2);
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg); color: var(--text);
+            display: flex; min-height: 100vh;
+        }
+
+        /* ── SIDEBAR ── */
+        aside {
+            width: 250px; background: var(--sidebar);
+            border-right: 1px solid var(--border);
+            padding: 28px 0; display: flex; flex-direction: column;
+            position: sticky; top: 0; height: 100vh; flex-shrink: 0;
+        }
+        .logo {
+            padding: 0 24px 32px;
+            font-size: 22px; font-weight: 800; color: var(--text);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .logo span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
+        .logo-icon {
+            width: 30px; height: 30px; border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex; align-items: center; justify-content: center; font-size: 14px;
+        }
+        .nav-item {
+            padding: 12px 24px; color: var(--text-dim);
+            text-decoration: none; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 14px; border-left: 3px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.03); color: var(--text); }
+        .nav-item.active {
+            background: rgba(0,240,255,0.05);
+            color: var(--accent); border-left-color: var(--accent);
+        }
+        .nav-spacer { flex: 1; }
+        .nav-item.danger { color: #ff5f56; }
+        .nav-item.danger:hover { background: rgba(255,95,86,0.08); }
+        .user-info {
+            padding: 16px 24px; font-size: 12px; color: var(--text-dim);
+            border-top: 1px solid var(--border); margin-top: 8px;
+        }
+
+        /* ── MAIN ── */
+        main { flex: 1; padding: 48px 60px; overflow-y: auto; max-height: 100vh; }
+        @media (max-width: 900px) { main { padding: 32px 24px; } }
+
+        h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 6px; }
+        .page-sub { font-size: 15px; color: var(--text-dim); margin-bottom: 40px; }
+
+        /* Current Plan Banner */
+        .current-plan-banner {
+            background: rgba(0,240,255,0.05);
+            border: 1px solid var(--border-accent); border-radius: 16px;
+            padding: 20px 28px; display: flex; align-items: center;
+            justify-content: space-between; flex-wrap: wrap; gap: 16px;
+            margin-bottom: 48px;
+        }
+        .current-plan-banner .plan-label { font-size: 14px; color: var(--text-dim); margin-bottom: 4px; }
+        .current-plan-banner .plan-val {
+            font-size: 24px; font-weight: 800; color: var(--accent);
+        }
+        .plan-badge-pill {
+            background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.25);
+            color: var(--green); font-size: 12px; font-weight: 700;
+            padding: 5px 14px; border-radius: 50px; display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 24px; margin-bottom: 60px;
+        }
+        .pricing-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 24px; padding: 36px; display: flex; flex-direction: column;
+            position: relative; transition: all 0.3s ease;
+        }
+        .pricing-card:hover { transform: translateY(-8px); border-color: var(--border-accent); }
+        .pricing-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 0 50px -15px var(--accent-glow);
+        }
+        .pricing-card.featured:hover { box-shadow: 0 20px 60px -15px var(--accent-glow); }
+        .feat-badge {
+            position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #03050a; font-size: 11px; font-weight: 800;
+            padding: 4px 16px; border-radius: 50px; white-space: nowrap;
+        }
+        .plan-name { font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 10px; }
+        .plan-price {
+            font-size: 42px; font-weight: 800; letter-spacing: -2px; margin-bottom: 4px; line-height: 1;
+        }
+        .plan-price .bdt { font-size: 26px; color: var(--accent); }
+        .plan-sub-price { font-size: 13px; color: var(--text-dim); margin-bottom: 24px; }
+        .plan-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 24px; }
+        .feat-list { list-style: none; flex: 1; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+        .feat-list li { font-size: 14px; color: var(--text-dim); display: flex; align-items: center; gap: 8px; }
+        .feat-list li .ck { color: var(--green); font-weight: bold; }
+        .feat-list li .xx { color: #444; }
+
+        /* Buttons */
+        .btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 13px 20px; border-radius: 50px; font-weight: 700; font-size: 14px;
+            cursor: pointer; border: none; transition: all 0.3s; font-family: 'Outfit', sans-serif;
+            text-decoration: none;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--accent), #00b8cc); color: #03050a; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px var(--accent-glow); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--text); }
+        .btn-bkash { background: linear-gradient(135deg, #e2136e, #c0105c); color: white; }
+        .btn-bkash:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--bkash-glow); }
+        .btn-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+        /* Transaction History */
+        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+        .tx-table {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden; margin-bottom: 48px;
+        }
+        .tx-header {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            padding: 14px 24px; font-size: 12px; color: var(--text-dim);
+            text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+            border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.2);
+        }
+        .tx-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            padding: 16px 24px; font-size: 14px; align-items: center;
+            border-bottom: 1px solid var(--border); transition: background 0.2s;
+        }
+        .tx-row:last-child { border-bottom: none; }
+        .tx-row:hover { background: rgba(255,255,255,0.02); }
+        .tx-empty { padding: 40px; text-align: center; color: var(--text-dim); font-size: 14px; }
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 5px;
+            font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 50px;
+        }
+        .status-pending { background: rgba(251,191,36,0.1); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+        .status-approved { background: rgba(0,255,136,0.08); color: var(--green); border: 1px solid rgba(0,255,136,0.2); }
+        .status-rejected { background: rgba(255,68,68,0.08); color: #ff6b6b; border: 1px solid rgba(255,68,68,0.2); }
+
+        /* ── BKASH MODAL ── */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px); display: none;
+            align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: #080c15; border: 1px solid var(--border);
+            border-radius: 24px; width: 100%; max-width: 480px;
+            padding: 40px; position: relative;
+            animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1) both;
+        }
+        @keyframes modalIn {
+            from { opacity:0; transform: scale(0.95) translateY(20px); }
+            to   { opacity:1; transform: scale(1) translateY(0); }
+        }
+        .modal-close {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--border); border: none; color: var(--text-dim);
+            width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+            font-size: 18px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; font-family: 'Outfit', sans-serif;
+        }
+        .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+        .bkash-modal-header {
+            background: linear-gradient(135deg, #e2136e, #9c0b47);
+            border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 28px;
+        }
+        .bkash-modal-logo { font-size: 40px; margin-bottom: 8px; }
+        .bkash-modal-header h3 { font-size: 20px; font-weight: 800; color: white; margin-bottom: 4px; }
+        .bkash-modal-header p { font-size: 14px; color: rgba(255,255,255,0.7); }
+
+        .payment-step {
+            background: rgba(226,19,110,0.05); border: 1px solid rgba(226,19,110,0.12);
+            border-radius: 14px; padding: 18px 20px; margin-bottom: 16px;
+            display: flex; gap: 14px; align-items: flex-start;
+        }
+        .payment-step-num {
+            width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+            background: #e2136e; color: white; font-size: 13px; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .payment-step h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+        .payment-step p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+        .bkash-number-display {
+            background: rgba(0,0,0,0.4); border: 1px solid rgba(226,19,110,0.3);
+            border-radius: 10px; padding: 12px 16px; font-size: 20px; font-weight: 800;
+            font-family: monospace; color: #ff6ba8; letter-spacing: 2px; margin: 8px 0;
+            text-align: center;
+        }
+        .amount-highlight {
+            background: rgba(0,240,255,0.05); border: 1px solid var(--border-accent);
+            border-radius: 10px; padding: 12px 16px; font-size: 22px; font-weight: 800;
+            color: var(--accent); text-align: center; margin: 8px 0;
+        }
+
+        .txn-input-wrap { margin: 24px 0 0; }
+        .txn-input-wrap label { font-size: 13px; color: var(--text-dim); margin-bottom: 8px; display: block; }
+        .txn-input-wrap input {
+            width: 100%; background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border); border-radius: 12px;
+            padding: 14px 18px; color: var(--text); font-size: 15px;
+            font-family: 'Outfit', sans-serif; outline: none; transition: border 0.2s;
+        }
+        .txn-input-wrap input:focus { border-color: #e2136e; }
+        .txn-input-wrap input::placeholder { color: var(--text-dim); }
+
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .modal-actions .btn { flex: 1; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 28px; right: 28px; z-index: 2000;
+            background: var(--card); border: 1px solid var(--border-accent);
+            border-radius: 14px; padding: 16px 22px; font-size: 14px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transform: translateY(80px); opacity: 0; transition: all 0.3s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-color: rgba(0,255,136,0.3); }
+        .toast.error { border-color: rgba(255,68,68,0.3); }
+    </style>
+</head>
+<body>
+    <aside>
+        <div class="logo">
+            <div class="logo-icon">🕷️</div>
+            Interact<span>AI</span>
+        </div>
+        <a href="index.html" class="nav-item">📊 Dashboard</a>
+        <a href="billing.html" class="nav-item active">💳 Billing & Plans</a>
+        <div class="nav-spacer"></div>
+        <div class="nav-item danger" onclick="logout()" style="cursor:pointer;">🚪 Log Out</div>
+        <div class="user-info" id="user-email">Loading...</div>
+    </aside>
+
+    <main>
+        <h1>Billing & Plans</h1>
+        <p class="page-sub">Manage your subscription. Pay with bKash in Bangladeshi Taka (৳).</p>
+
+        <!-- Current Plan -->
+        <div class="current-plan-banner">
+            <div>
+                <div class="plan-label">Your Current Plan</div>
+                <div class="plan-val" id="current-plan-name">Free</div>
+            </div>
+            <div class="plan-badge-pill">
+                <span>●</span> Active
+            </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="pricing-grid">
+            <!-- Free -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price"><span class="bdt">৳</span>0</div>
+                <div class="plan-sub-price">Free forever · বিনামূল্যে</div>
+                <hr class="plan-divider">
+                <ul class="feat-list">
+                    <li><span class="ck">✓</span> 1 AI Chatbot</li>
+                    <li><span class="ck">✓</span> 1 Website Integration</li>
+                    <li><span class="ck">✓</span> Limited Conversations Quota</li>
+                    <li><span class="xx">✗</span> Remove Branding</li>
+                </ul>
+                <button class="btn btn-disabled" id="free-btn">Current Plan</button>
+            </div>
+
+            <!-- Basic (Featured) -->
+            <div class="pricing-card featured">
+                <div class="feat-badge">⭐ Most Popular</div>
+                <div class="plan-name">Basic</div>
+                <div class="plan-price"><span class="bdt">৳</span>499</div>
+                <div class="plan-sub-price">/মাস (month)</div>
+                <hr class="plan-divider">
+                <ul class="feat-list">
+                    <li><span class="ck">✓</span> 3 Custom AI Bots</li>
+                    <li><span class="ck">✓</span> Unlimited pages trained</li>
+                    <li><span class="ck">✓</span> Standard Quota</li>
+                    <li><span class="ck">✓</span> Lead capture</li>
+                    <li><span class="ck">✓</span> Remove Bot Bro branding</li>
+                </ul>
+                <button class="btn btn-bkash" onclick="openBkashModal('Basic', 499)">
+                    📱 Pay ৳499 with bKash
+                </button>
+            </div>
+
+            <!-- Pro -->
+            <div class="pricing-card">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price"><span class="bdt">৳</span>999</div>
+                <div class="plan-sub-price">/মাস (month)</div>
+                <hr class="plan-divider">
+                <ul class="feat-list">
+                    <li><span class="ck">✓</span> Unlimited Custom AI Bots</li>
+                    <li><span class="ck">✓</span> Unlimited everything</li>
+                    <li><span class="ck">✓</span> Unlimited Conversations</li>
+                    <li><span class="ck">✓</span> Priority support</li>
+                </ul>
+                <button class="btn btn-bkash" onclick="openBkashModal('Pro', 999)"
+                    style="background:rgba(226,19,110,0.1);border:1px solid rgba(226,19,110,0.3);color:#ff6ba8;box-shadow:none;">
+                    📱 Pay ৳999 with bKash
+                </button>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="section-title">Payment History</div>
+        <div class="tx-table">
+            <div class="tx-header">
+                <span>Plan</span>
+                <span>Amount</span>
+                <span>bKash TXN ID</span>
+                <span>Date</span>
+                <span>Status</span>
+            </div>
+            <div id="tx-body">
+                <div class="tx-empty">
+                    <div style="font-size:32px;margin-bottom:12px;">💳</div>
+                    No payment history yet. Upgrade to see your transactions here.
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div style="background:rgba(226,19,110,0.05);border:1px solid rgba(226,19,110,0.15);border-radius:16px;padding:24px 28px;">
+            <h4 style="color:#ff6ba8;margin-bottom:10px;font-size:16px;">📱 How bKash Payment Works</h4>
+            <ol style="padding-left:20px;color:var(--text-dim);font-size:14px;line-height:2;">
+                <li>Click "Pay with bKash" on your desired plan.</li>
+                <li>Send the exact amount to our bKash number: <strong style="color:#ff6ba8;font-family:monospace;">01302450710</strong></li>
+                <li>Enter your bKash Transaction ID in the popup form.</li>
+                <li>Our team verifies & activates your plan within <strong style="color:var(--text);">1 hour</strong>.</li>
+            </ol>
+        </div>
+    </main>
+
+    <!-- ── BKASH PAYMENT MODAL ── -->
+    <div class="modal-overlay" id="bkash-modal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeBkashModal()">✕</button>
+
+            <div class="bkash-modal-header">
+                <div class="bkash-modal-logo">📱</div>
+                <h3>Pay with bKash</h3>
+                <p>Upgrading to <strong id="modal-plan-name">Pro</strong> Plan</p>
+            </div>
+
+            <div class="payment-step">
+                <div class="payment-step-num">1</div>
+                <div>
+                    <h4>Send Money via bKash App</h4>
+                    <p>Open bKash → Send Money → Enter this number:</p>
+                    <div class="bkash-number-display">01302450710</div>
+                </div>
+            </div>
+
+            <div class="payment-step">
+                <div class="payment-step-num">2</div>
+                <div>
+                    <h4>Send Exact Amount</h4>
+                    <p>Amount for <span id="modal-plan-name-2">Pro</span> Plan:</p>
+                    <div class="amount-highlight" id="modal-amount">৳3,200</div>
+                </div>
+            </div>
+
+            <div class="payment-step">
+                <div class="payment-step-num">3</div>
+                <div>
+                    <h4>Enter Transaction ID Below</h4>
+                    <p>Copy the TXN ID from your bKash SMS receipt and paste it below.</p>
+                </div>
+            </div>
+
+            <div class="txn-input-wrap">
+                <label>bKash Transaction ID (TXN ID)</label>
+                <input type="text" id="txn-id-input" placeholder="e.g. 4FG3A9BHKL" maxlength="12">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeBkashModal()">Cancel</button>
+                <button class="btn btn-bkash" id="submit-payment-btn" onclick="submitBkashPayment()">
+                    Submit Payment ✓
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = 'login.html';
+
+        let selectedPlan = '', selectedAmount = 0;
+
+        // Load user info
+        async function loadUser() {
+            try {
+                const res = await fetch('http://localhost:8000/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) { logout(); return; }
+                const data = await res.json();
+                document.getElementById('user-email').textContent = data.email;
+                if (data.plan) {
+                    document.getElementById('current-plan-name').textContent = data.plan;
+                }
+            } catch(e) {}
+        }
+
+        // Load payment history
+        async function loadPayments() {
+            try {
+                const res = await fetch('http://localhost:8000/my-payments', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) return;
+                const payments = await res.json();
+                const body = document.getElementById('tx-body');
+                if (!payments || payments.length === 0) return;
+                body.innerHTML = payments.map(p => `
+                    <div class="tx-row">
+                        <span>${p.plan}</span>
+                        <span style="color:var(--accent);font-weight:700;">৳${Number(p.amount).toLocaleString()}</span>
+                        <span style="font-family:monospace;font-size:13px;">${p.bkash_txn_id || '—'}</span>
+                        <span style="color:var(--text-dim);font-size:13px;">${new Date(p.created_at).toLocaleDateString()}</span>
+                        <span><span class="status-pill status-${p.status}">${p.status === 'pending' ? '⏳ Pending' : p.status === 'approved' ? '✓ Approved' : '✗ Rejected'}</span></span>
+                    </div>
+                `).join('');
+            } catch(e) {}
+        }
+
+        function openBkashModal(plan, amount) {
+            selectedPlan = plan;
+            selectedAmount = amount;
+            document.getElementById('modal-plan-name').textContent = plan;
+            document.getElementById('modal-plan-name-2').textContent = plan;
+            document.getElementById('modal-amount').textContent = `৳${amount.toLocaleString()}`;
+            document.getElementById('txn-id-input').value = '';
+            document.getElementById('bkash-modal').classList.add('show');
+        }
+
+        function closeBkashModal() {
+            document.getElementById('bkash-modal').classList.remove('show');
+        }
+
+        async function submitBkashPayment() {
+            const txnId = document.getElementById('txn-id-input').value.trim();
+            if (!txnId || txnId.length < 6) {
+                showToast('❌ Please enter a valid bKash Transaction ID', 'error');
+                return;
+            }
+            const btn = document.getElementById('submit-payment-btn');
+            btn.textContent = 'Submitting...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://localhost:8000/bkash-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        plan: selectedPlan,
+                        amount: selectedAmount,
+                        bkash_txn_id: txnId
+                    })
+                });
+
+                if (res.ok) {
+                    closeBkashModal();
+                    showToast('✅ Payment submitted! Awaiting verification (within 1 hour).', 'success');
+                    loadPayments();
+                } else {
+                    const err = await res.json();
+                    showToast('❌ ' + (err.detail || 'Failed to submit payment.'), 'error');
+                }
+            } catch(e) {
+                showToast('❌ Could not connect to server.', 'error');
+            }
+            btn.textContent = 'Submit Payment ✓';
+            btn.disabled = false;
+        }
+
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `toast ${type} show`;
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+
+        loadUser();
+        loadPayments();
+    </script>
+</body>
+</html>
