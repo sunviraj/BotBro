@@ -605,17 +605,46 @@
     /* ══════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════ */
+    @media(max-width:900px){
+        .steps-layout{grid-template-columns:1fr;gap:40px}
+        .bkash-layout{grid-template-columns:1fr;gap:40px}
+        .footer-inner{grid-template-columns:1fr 1fr;gap:36px}
+        .pricing-cards { grid-template-columns: 1fr; }
+        .pricing-card { margin: 0 15px; }
+    }
     @media(max-width:768px){
+        body, html { overflow-x: hidden; width: 100%; max-width: 100vw; }
         .nav-links{display:none}
         .hamburger{display:flex}
-        .hero-cta .btn-lg{padding:13px 26px;font-size:15px}
-        .mockup-body{grid-template-columns:1fr}
-        .stats-bar{gap:28px}
-        .stat-num{font-size:24px}
+        .header-inner { padding: 10px 15px; }
+        .hero-h1 { font-size: 34px !important; letter-spacing: -1px; margin-bottom: 15px; }
+        .hero-sub { font-size: 15px !important; padding: 0 10px; margin-bottom: 30px; }
+        .hero-content { padding: 40px 15px 20px; }
+        .hero-cta { flex-direction: column; gap: 15px; }
+        .hero-cta .btn-lg { width: 100%; justify-content: center; box-sizing: border-box; }
+        .floating-badge, .chat-widget-mockup { display: none !important; }
+        
+        .builder-ui { width: 100% !important; margin: 0 auto; box-sizing: border-box; }
+        .builder-header { padding: 12px; font-size: 11px; }
+        .mockup-body { grid-template-columns: 1fr; display: flex; flex-direction: column; gap: 20px; }
+        .builder-main { padding: 15px; }
+        .chat-preview-box { position: static !important; width: 100% !important; border-radius: 12px !important; right: 0; box-shadow: none; border-top: 1px solid var(--border); }
+        
+        .stats-bar { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 10px; }
+        .stat-item { width: 40%; }
+        .stat-num { font-size: 22px; }
+        
+        .steps-layout, .bkash-layout, .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+        #cta-banner { padding: 60px 15px; }
+        .cta-inner { padding: 40px 20px; }
+        .testimonial-card { min-width: 100%; flex: 0 0 100%; }
     }
     @media(max-width:480px){
+        .hero-h1 { font-size: 28px !important; }
         .stats-bar{flex-direction:column;gap:16px}
-        .cta-inner{padding:48px 28px}
+        .stat-item { width: 100%; }
+        .footer-inner{grid-template-columns:1fr}
+        .cta-inner{padding:30px 20px}
     }
     </style>
 </head>
