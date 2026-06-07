@@ -2,6 +2,8 @@
   <img src="https://img.shields.io/badge/Status-Live-success?style=for-the-badge" alt="Status">
   <h1>🕷️ BotBro</h1>
   <p><strong>The Intelligent AI Chatbot Builder for Modern Websites</strong></p>
+  <br/>
+  <img src="screenshots/demo_result.png" alt="BotBro Homepage Screenshot" width="800" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
 </div>
 
 <br/>
