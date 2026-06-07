@@ -65,6 +65,12 @@
         button:hover { transform: translateY(-2px); opacity: 0.9; }
         .footer-link { margin-top: 20px; font-size: 13px; color: var(--text-dim); }
         .footer-link a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 480px) {
+            body { padding: 20px; overflow: auto; height: auto; min-height: 100vh; }
+            .login-card { padding: 25px 20px; }
+            h1 { font-size: 24px; }
+            p { font-size: 13px; }
+        }
     </style>
 </head>
 <body>

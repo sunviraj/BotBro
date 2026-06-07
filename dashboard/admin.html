@@ -243,6 +243,18 @@
         /* ── PAYMENT CARD HIGHLIGHT ── */
         .pending-payment-row td { color: var(--text) !important; }
         .pending-highlight { background: rgba(255,140,0,0.03) !important; }
+        @media (max-width: 900px) {
+            body { flex-direction: column; height: auto; overflow: auto; }
+            aside { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 15px; flex-direction: row; overflow-x: auto; box-sizing: border-box; }
+            .logo { margin-bottom: 0; margin-right: 20px; font-size: 16px; }
+            .logo-icon { width: 24px; height: 24px; font-size: 12px; }
+            .nav-item { padding: 8px 12px; font-size: 13px; white-space: nowrap; }
+            .nav-bottom { display: none; }
+            main { width: 100%; padding: 15px; box-sizing: border-box; }
+            .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .stats-grid, .admin-grid { grid-template-columns: 1fr; gap: 15px; }
+            .users-table { display: block; overflow-x: auto; }
+        }
     </style>
 </head>
 <body>
